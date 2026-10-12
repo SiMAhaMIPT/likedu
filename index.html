@@ -5,12 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Тренажёр: Дифференциальные уравнения 1-го порядка</title>
 
-<!-- KaTeX: CSS + JS + auto-render (порядок важен, без defer) -->
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
-
 <style>
 :root{
   --bg:#f7f8fa; --card:#fff; --text:#1f2937; --muted:#6b7280;
@@ -21,22 +15,61 @@
 html,body{margin:0;padding:0}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  background:var(--bg); color:var(--text); line-height:1.65; font-size:16px;
+  background:var(--bg); color:var(--text); line-height:1.7; font-size:16px;
 }
 a{color:var(--accent); text-decoration:none}
 a:hover{text-decoration:underline}
 
-#katex-warning{
-  display:none; background:#fee2e2; color:#7f1d1d;
-  padding:14px 20px; border-bottom:2px solid #fca5a5;
-  font-size:14.5px; text-align:center;
+/* ============ МАТЕМАТИКА ============ */
+.math-inline{white-space:nowrap}
+.math-display{
+  display:block; text-align:center; margin:14px 0;
+  overflow-x:auto; padding:4px 0;
 }
-#katex-warning b{color:#7f1d1d}
+.frac{
+  display:inline-block; vertical-align:middle; text-align:center;
+  margin:0 3px; font-size:0.95em; line-height:1.15;
+  position:relative; top:-0.05em;
+}
+.frac > .num{
+  display:block; padding:0 5px 1px;
+  border-bottom:1px solid currentColor;
+}
+.frac > .den{
+  display:block; padding:1px 5px 0;
+}
+.sqrt{display:inline-block; vertical-align:middle; line-height:1}
+.sqrt::before{content:"√"; font-size:1.05em; margin-right:-1px}
+.sqrt-inner{
+  display:inline-block; border-top:1px solid currentColor;
+  padding:2px 4px 0; margin-left:1px; vertical-align:top;
+}
+.fn{font-style:normal; padding-right:1px}
+.sym{font-style:normal}
+.bigop{font-size:1.25em; vertical-align:-0.15em; margin:0 2px; font-style:normal}
+sup{font-size:0.72em; vertical-align:super; line-height:0}
+sub{font-size:0.72em; vertical-align:sub; line-height:0}
+sup sup{font-size:0.8em}
+.boxed{
+  border:1.5px solid currentColor; padding:2px 6px;
+  border-radius:4px; display:inline-block; background:#fff8e1;
+}
+.cases{
+  display:inline-block; vertical-align:middle; text-align:left;
+  margin:0 6px; padding-left:2px; border-left:none; position:relative;
+}
+.cases::before{
+  content:""; position:absolute; left:-4px; top:0; bottom:0;
+  width:8px; border:1.5px solid currentColor; border-right:none;
+  border-radius:6px 0 0 6px;
+}
+.case-row{display:block; padding-left:8px}
+.case-col{display:inline-block; padding-right:14px}
 
-/* ---------- Layout ---------- */
+/* ============ LAYOUT ============ */
 #app{display:flex; min-height:100vh}
 #sidebar{
-  width:270px; flex-shrink:0; background:#0f172a; color:#e2e8f0;
+  width:280px; flex-shrink:0; background:#0f172a; color:#e2e8f0;
   padding:24px 18px; position:sticky; top:0; height:100vh; overflow-y:auto;
 }
 #sidebar h1{font-size:18px; margin:0 0 8px; color:#fff}
@@ -62,7 +95,7 @@ main{flex:1; padding:36px 44px; max-width:1050px; margin:0 auto}
   main{padding:20px}
 }
 
-/* ---------- Sections ---------- */
+/* ============ SECTIONS ============ */
 section{margin-bottom:60px; scroll-margin-top:20px}
 section h2{
   font-size:28px; margin:0 0 18px; padding-bottom:12px;
@@ -92,7 +125,7 @@ section p{margin:10px 0}
   padding:12px 16px; border-radius:6px; margin:14px 0; font-size:15px;
 }
 
-/* ---------- Tasks ---------- */
+/* ============ TASKS ============ */
 .tasks-header{
   display:flex; align-items:center; justify-content:space-between;
   margin:26px 0 14px;
@@ -111,7 +144,7 @@ section p{margin:10px 0}
   font-size:11.5px; padding:2px 8px; border-radius:10px;
   background:#e0e7ff; color:#3730a3; font-weight:600;
 }
-.task-statement{margin:8px 0 16px; font-size:16.5px}
+.task-statement{margin:8px 0 16px; font-size:17px}
 
 .answer-row{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0}
 .answer-row input{
@@ -153,9 +186,6 @@ button{
 }
 .solution-block h4{margin:0 0 10px; color:var(--accent); font-size:16px}
 
-.katex{font-size:1.02em}
-.katex-display{overflow-x:auto; overflow-y:hidden; padding:2px 0}
-
 footer{
   text-align:center; color:var(--muted); font-size:13px;
   padding:30px 0 20px; border-top:1px solid var(--border); margin-top:40px;
@@ -163,12 +193,6 @@ footer{
 </style>
 </head>
 <body>
-
-<div id="katex-warning">
-  <b>⚠ Формулы не отображаются.</b>
-  Похоже, что библиотека KaTeX не загрузилась с CDN.
-  Проверьте интернет или доступ к <code>cdnjs.cloudflare.com</code>.
-</div>
 
 <div id="app">
   <aside id="sidebar">
@@ -194,18 +218,19 @@ footer{
       <div class="theory-card">
         <span class="label">Теория</span>
 
-        <p><b>Дифференциальное уравнение (ДУ)</b> — уравнение, в котором неизвестная функция
-        связана со своими производными. <b>Порядок</b> ДУ — порядок старшей производной.</p>
+        <p><b>Дифференциальное уравнение (ДУ)</b> — уравнение, в котором неизвестная
+        функция связана со своими производными. <b>Порядок</b> ДУ — порядок старшей
+        производной.</p>
 
         <p>Мы рассматриваем <b>ДУ первого порядка</b>. В общем виде оно содержит:</p>
         <ol>
           <li>независимую переменную $x$;</li>
           <li>зависимую переменную $y = y(x)$ — функцию;</li>
-          <li>первую производную $y' = \dfrac{dy}{dx}$.</li>
+          <li>первую производную $y' = dy/dx$.</li>
         </ol>
 
-        <p>Стандартная запись: $F(x, y, y') = 0$, либо разрешённая относительно производной:
-        $y' = f(x, y)$.</p>
+        <p>Стандартная запись: $F(x, y, y') = 0$, либо разрешённая относительно
+        производной: $y' = f(x, y)$.</p>
 
         <div class="formula-block">
           <b>Общее решение</b> — множество всех функций, удовлетворяющих уравнению.
@@ -216,7 +241,8 @@ footer{
         </div>
 
         <p>Задача с начальным условием $y(x_0) = y_0$ называется <b>задачей Коши</b>.
-        Из общего решения подстановкой $x_0, y_0$ находят $C$ и получают частное решение.</p>
+        Из общего решения подстановкой $x_0, y_0$ находят $C$ и получают частное
+        решение.</p>
 
         <div class="note">
           <b>Важно:</b> для решения ДУ нужно уверенно <b>интегрировать</b> и
@@ -241,47 +267,47 @@ footer{
         <span class="label">Теория</span>
 
         <p><b>Определение.</b> Уравнение вида</p>
-        $$y' = f(x)\, g(y)$$
+        $$y' = f(x) \cdot g(y)$$
         <p>называется уравнением с разделяющимися переменными.</p>
 
         <h3>Алгоритм решения</h3>
         <ol>
-          <li>Записать производную как $\dfrac{dy}{dx}$:
-            $$\frac{dy}{dx} = f(x)\,g(y).$$</li>
-          <li><b>Разделить переменные</b>: перенести всё с $y$ влево, всё с $x$ — вправо:
-            $$\frac{dy}{g(y)} = f(x)\,dx.$$</li>
+          <li>Записать производную как $dy/dx$:
+            $$dy/dx = f(x) \cdot g(y).$$</li>
+          <li><b>Разделить переменные</b>: перенести всё с $y$ влево, всё с $x$ —
+            вправо:
+            $$dy / g(y) = f(x) \, dx.$$</li>
           <li><b>Проинтегрировать</b> обе части:
-            $$\int \frac{dy}{g(y)} = \int f(x)\,dx + C.$$</li>
+            $$\int dy / g(y) = \int f(x) \, dx + C.$$</li>
           <li>Упростить и записать <b>общий интеграл</b> или <b>общее решение</b>.
-              Если задано начальное условие — найти $C$.</li>
+            Если задано начальное условие — найти $C$.</li>
         </ol>
 
         <div class="note">
           <b>Осторожно!</b> При делении на $g(y)$ или на функцию от $x$ можно
-          <b>потерять решения</b>. Проверяйте, не являются ли $g(y)=0$ или
+          <b>потерять решения</b>. Проверяйте, не являются ли $g(y) = 0$ или
           соответствующие $x$ решениями уравнения.
         </div>
 
         <h3>Пример 1</h3>
-        <p>Решить $y' = \dfrac{x}{y}$.</p>
-        <p>Перепишем: $\dfrac{dy}{dx} = \dfrac{x}{y}$.
-        Разделяем: $y\,dy = x\,dx$. Интегрируем:</p>
-        $$\int y\,dy = \int x\,dx + C \;\Rightarrow\;
-          \frac{y^2}{2} = \frac{x^2}{2} + C.$$
-        <p>Умножим на 2 и переобозначим $C$: общий интеграл</p>
-        $$y^2 = x^2 + C.$$
+        <p>Решить $y' = x / y$.</p>
+        <p>Перепишем: $dy/dx = x/y$. Разделяем: $y \, dy = x \, dx$.
+        Интегрируем:</p>
+        $$\int y \, dy = \int x \, dx + C \Rightarrow y^2 / 2 = x^2 / 2 + C.$$
+        <p>Умножим на 2 и переобозначим $C$: общий интеграл
+        $y^2 = x^2 + C$.</p>
 
         <h3>Пример 2 (задача Коши)</h3>
         <p>Найти частное решение $y' = -2xy$, если $y(0) = 1$.</p>
-        <p>$\dfrac{dy}{dx} = -2xy$. Разделяем: $\dfrac{dy}{y} = -2x\,dx$.
-        Интегрируем: $\ln|y| = -x^2 + C$. Тогда $y = C_1 e^{-x^2}$.</p>
-        <p>Подставляем $x=0,\;y=1$: $1 = C_1 e^0 \Rightarrow C_1 = 1$.
+        <p>$dy/dx = -2xy$. Разделяем: $dy / y = -2x \, dx$. Интегрируем:
+        $\ln|y| = -x^2 + C_1$. Тогда $y = C e^{-x^2}$.</p>
+        <p>Подставляем $x = 0, y = 1$: $1 = C \cdot e^0 \Rightarrow C = 1$.
         Частное решение: $y = e^{-x^2}$.</p>
 
         <div class="tip">
           <b>Технический приём.</b> Если в правой части появляется логарифм,
-          константу удобно тоже писать под логарифмом: вместо $+C$ писать $+\ln|C|$ —
-          это упрощает дальнейшие преобразования.
+          константу удобно тоже писать под логарифмом: вместо $+ C$ писать
+          $+ \ln|C|$ — это упрощает дальнейшие преобразования.
         </div>
       </div>
 
@@ -299,14 +325,14 @@ footer{
       <div class="theory-card">
         <span class="label">Теория</span>
 
-        <p><b>Определение.</b> Уравнение $y' = f(x,y)$ называется <b>однородным</b>,
+        <p><b>Определение.</b> Уравнение $y' = f(x, y)$ называется <b>однородным</b>,
         если функция $f$ удовлетворяет условию</p>
         $$f(\lambda x, \lambda y) = f(x, y) \quad \forall \lambda \neq 0.$$
 
         <h3>Проверка на однородность</h3>
         <p>В исходное уравнение вместо $x$ подставляем $\lambda x$, вместо $y$ —
-        $\lambda y$; производную $y'$ не трогаем. Если все $\lambda$ сокращаются
-        и получается исходное уравнение — оно однородное.</p>
+        $\lambda y$; производную $y'$ не трогаем. Если все $\lambda$ сокращаются и
+        получается исходное уравнение — оно однородное.</p>
 
         <h3>Стандартная замена</h3>
         <div class="formula-block">
@@ -318,13 +344,13 @@ footer{
         с разделяющимися переменными относительно $u$ и $x$.</p>
 
         <h3>Пример</h3>
-        <p>Решить $y' = \dfrac{x+y}{x}$.</p>
-        <p>Проверка: $f(\lambda x, \lambda y) = \dfrac{\lambda x + \lambda y}{\lambda x}
-        = \dfrac{x+y}{x} = f(x,y)$ — однородное.</p>
-        <p>Замена $y = ux$, $y' = u'x + u$:</p>
-        $$u'x + u = \frac{x + ux}{x} = 1 + u.$$
-        <p>Отсюда $u'x = 1$, то есть $\dfrac{du}{dx} = \dfrac{1}{x}$.
-        Интегрируем: $u = \ln|x| + C$. Обратная замена $u = y/x$:</p>
+        <p>Решить $y' = (x + y) / x$.</p>
+        <p>Проверка: $f(\lambda x, \lambda y) = (\lambda x + \lambda y)/(\lambda x)
+        = (x + y)/x = f(x, y)$ — однородное.</p>
+        <p>Замена $y = ux, y' = u'x + u$:</p>
+        $$u' x + u = (x + ux)/x = 1 + u.$$
+        <p>Отсюда $u' x = 1$, то есть $du/dx = 1/x$. Интегрируем:
+        $u = \ln|x| + C$. Обратная замена $u = y/x$:</p>
         $$y = x \ln|x| + Cx.$$
 
         <div class="note">
@@ -349,52 +375,48 @@ footer{
         <span class="label">Теория</span>
 
         <p><b>Определение.</b> Уравнение вида</p>
-        $$y' + P(x)\,y = Q(x)$$
+        $$y' + P(x) \, y = Q(x)$$
         <p>называется <b>линейным неоднородным</b> уравнением первого порядка.
-        Здесь $P(x)$ и $Q(x)$ — заданные функции (или константы), $Q(x) \not\equiv 0$.</p>
+        Здесь $P(x)$ и $Q(x)$ — заданные функции (или константы), $Q(x) \neq 0$.</p>
 
-        <p>Если переменные разделить не удалось и уравнение не однородное —
-        в 90% случаев перед вами именно линейное уравнение.</p>
+        <p>Если переменные разделить не удалось и уравнение не однородное — в 90%
+        случаев перед вами именно линейное уравнение.</p>
 
         <h3>Метод Бернулли (замена $y = uv$)</h3>
         <p>Ищем решение в виде произведения двух функций:</p>
-        $$y = u(x)\cdot v(x), \qquad y' = u'v + uv'.$$
+        $$y = u(x) \cdot v(x), \qquad y' = u'v + uv'.$$
         <p>Подставляем в уравнение:</p>
-        $$u'v + uv' + P(x)\,uv = Q(x).$$
+        $$u'v + uv' + P(x) \, uv = Q(x).$$
         <p>Группируем слагаемые с $u$:</p>
-        $$u'v + u\bigl(v' + P(x)v\bigr) = Q(x).$$
+        $$u'v + u \cdot (v' + P(x) \, v) = Q(x).$$
 
         <div class="formula-block">
           <b>Система:</b>
-          $$\begin{cases}
-            v' + P(x)\,v = 0,\\[4pt]
-            u'\,v = Q(x).
-          \end{cases}$$
+          $$v' + P(x) \, v = 0, \qquad u' \, v = Q(x).$$
         </div>
 
         <ol>
           <li>Из первого уравнения находим $v$ (константу не пишем — она
-              «поглотится» на следующем шаге).</li>
+            «поглотится» на следующем шаге).</li>
           <li>Подставляем $v$ во второе уравнение и находим $u$ (здесь уже
-              добавляем $+C$).</li>
+            добавляем $+ C$).</li>
           <li>Записываем $y = uv$.</li>
         </ol>
 
         <h3>Пример</h3>
         <p>Решить $y' + y = 1$.</p>
-        <p>Замена $y = uv$, $y' = u'v + uv'$:
-          $u'v + uv' + uv = 1 \Rightarrow u'v + u(v' + v) = 1$.</p>
-        <p>Система:
-          $\begin{cases} v' + v = 0 \\ u'v = 1 \end{cases}$.</p>
-        <p>Из первого: $\dfrac{dv}{v} = -dx \Rightarrow \ln|v| = -x \Rightarrow v = e^{-x}$.</p>
-        <p>Второе: $u' e^{-x} = 1 \Rightarrow u' = e^{x} \Rightarrow u = e^{x} + C$.</p>
-        <p>Итого: $y = uv = (e^{x} + C)\,e^{-x} = 1 + Ce^{-x}$.</p>
-        <p>Ответ: $y = 1 + Ce^{-x}$.</p>
+        <p>Замена $y = uv, y' = u'v + uv'$:
+        $u'v + uv' + uv = 1 \Rightarrow u'v + u(v' + v) = 1$.</p>
+        <p>Система: $v' + v = 0$, $u'v = 1$.</p>
+        <p>Из первого: $dv/v = -dx \Rightarrow \ln|v| = -x \Rightarrow v = e^{-x}$.</p>
+        <p>Второе: $u' e^{-x} = 1 \Rightarrow u' = e^x \Rightarrow u = e^x + C$.</p>
+        <p>Итого: $y = uv = (e^x + C) e^{-x} = 1 + C e^{-x}$.</p>
+        <p>Ответ: $y = 1 + C e^{-x}$.</p>
 
         <div class="tip">
-          Если после интегрирования получается «некрасивый» ответ, часто
-          выгоднее оставить результат в виде общего интеграла — это нормально
-          и не считается ошибкой.
+          Если после интегрирования получается «некрасивый» ответ, часто выгоднее
+          оставить результат в виде общего интеграла — это нормально и не считается
+          ошибкой.
         </div>
       </div>
 
@@ -413,368 +435,509 @@ footer{
 
 <script>
 /* ============================================================
-   ДАННЫЕ ЗАДАЧ
+   1. МИНИ-РЕНДЕРЕР ФОРМУЛ (без внешних библиотек)
    ============================================================ */
-const TASKS = {
+var SYMBOLS = {
+  pm:'±', mp:'∓', cdot:'·', times:'×', div:'÷',
+  Rightarrow:'⇒', Leftarrow:'⇐', Leftrightarrow:'⇔',
+  to:'→', mapsto:'↦',
+  leq:'≤', le:'≤', geq:'≥', ge:'≥', neq:'≠', ne:'≠',
+  equiv:'≡', approx:'≈', sim:'∼', propto:'∝',
+  infty:'∞', partial:'∂', nabla:'∇',
+  int:'∫', iint:'∬', oint:'∮', sum:'∑', prod:'∏',
+  alpha:'α', beta:'β', gamma:'γ', delta:'δ',
+  epsilon:'ε', varepsilon:'ε', zeta:'ζ', eta:'η',
+  theta:'θ', vartheta:'ϑ', iota:'ι', kappa:'κ',
+  lambda:'λ', mu:'μ', nu:'ν', xi:'ξ',
+  pi:'π', rho:'ρ', sigma:'σ', tau:'τ',
+  upsilon:'υ', phi:'φ', varphi:'φ', chi:'χ',
+  psi:'ψ', omega:'ω',
+  Gamma:'Γ', Delta:'Δ', Theta:'Θ', Lambda:'Λ',
+  Xi:'Ξ', Pi:'Π', Sigma:'Σ', Phi:'Φ',
+  Psi:'Ψ', Omega:'Ω'
+};
+var FUNCS = {
+  ln:'ln', lg:'lg', log:'log',
+  sin:'sin', cos:'cos', tan:'tan', tg:'tg',
+  cot:'cot', ctg:'ctg', sec:'sec', csc:'csc',
+  arcsin:'arcsin', arccos:'arccos', arctan:'arctan', arctg:'arctg',
+  sinh:'sinh', cosh:'cosh', tanh:'tanh'
+};
+var IGNORE = ['displaystyle','textstyle','limits','nolimits',
+              'left','right','bigl','bigr','Bigl','Bigr','big','Big'];
+
+function matchingBrace(s, openIdx) {
+  var depth = 1;
+  for (var i = openIdx + 1; i < s.length; i++) {
+    if (s[i] === '{') depth++;
+    else if (s[i] === '}') { depth--; if (depth === 0) return i; }
+  }
+  return s.length;
+}
+
+function renderTex(tex) {
+  function process(s) {
+    var out = '';
+    var i = 0;
+    while (i < s.length) {
+      var ch = s[i];
+
+      /* html escape */
+      if (ch === '<') { out += '&lt;'; i++; continue; }
+      if (ch === '>') { out += '&gt;'; i++; continue; }
+      if (ch === '&') { out += '&amp;'; i++; continue; }
+
+      /* whitespace */
+      if (ch === ' ' || ch === '\n' || ch === '\t') { out += ' '; i++; continue; }
+
+      /* ^ and _ */
+      if (ch === '^' || ch === '_') {
+        var tag = ch === '^' ? 'sup' : 'sub';
+        var arg;
+        if (s[i+1] === '{') {
+          var close = matchingBrace(s, i+1);
+          arg = s.substring(i+2, close);
+          i = close + 1;
+        } else {
+          arg = s[i+1] || '';
+          i += 2;
+        }
+        out += '<' + tag + '>' + process(arg) + '</' + tag + '>';
+        continue;
+      }
+
+      /* backslash */
+      if (ch === '\\') {
+        var nxt = s[i+1];
+        /* spacing commands */
+        if (nxt === ',' || nxt === ';' || nxt === ':' || nxt === ' ' || nxt === '!') {
+          out += ' '; i += 2; continue;
+        }
+        /* \\ — line break */
+        if (nxt === '\\') { out += '<br>'; i += 2; continue; }
+
+        var m = /^\\([a-zA-Z]+)/.exec(s.substring(i));
+        if (m) {
+          var cmd = m[1];
+          i += 1 + cmd.length;
+
+          if (cmd === 'frac' || cmd === 'dfrac' || cmd === 'tfrac') {
+            while (s[i] === ' ') i++;
+            var c1 = matchingBrace(s, i);
+            var num = s.substring(i+1, c1);
+            i = c1 + 1;
+            while (s[i] === ' ') i++;
+            var c2 = matchingBrace(s, i);
+            var den = s.substring(i+1, c2);
+            i = c2 + 1;
+            out += '<span class="frac"><span class="num">' + process(num) +
+                   '</span><span class="den">' + process(den) + '</span></span>';
+            continue;
+          }
+
+          if (cmd === 'sqrt') {
+            while (s[i] === ' ') i++;
+            if (s[i] === '[') {
+              var rb = s.indexOf(']', i);
+              if (rb !== -1) i = rb + 1;
+            }
+            var cs = matchingBrace(s, i);
+            var inner = s.substring(i+1, cs);
+            i = cs + 1;
+            out += '<span class="sqrt"><span class="sqrt-inner">' +
+                   process(inner) + '</span></span>';
+            continue;
+          }
+
+          if (cmd === 'boxed') {
+            while (s[i] === ' ') i++;
+            var cb = matchingBrace(s, i);
+            var bx = s.substring(i+1, cb);
+            i = cb + 1;
+            out += '<span class="boxed">' + process(bx) + '</span>';
+            continue;
+          }
+
+          if (cmd === 'begin') {
+            while (s[i] === ' ') i++;
+            var ce = matchingBrace(s, i);
+            var env = s.substring(i+1, ce);
+            i = ce + 1;
+            if (env === 'cases') {
+              var endTag = '\\end{cases}';
+              var endIdx = s.indexOf(endTag, i);
+              var content = s.substring(i, endIdx === -1 ? s.length : endIdx);
+              i = endIdx === -1 ? s.length : endIdx + endTag.length;
+              var rows = content.split(/\\\\/);
+              var html = '<span class="cases">';
+              for (var r = 0; r < rows.length; r++) {
+                var row = rows[r].trim();
+                if (!row) continue;
+                var cols = row.split('&');
+                html += '<span class="case-row">';
+                for (var c = 0; c < cols.length; c++) {
+                  html += '<span class="case-col">' + process(cols[c].trim()) +
+                          '</span>';
+                }
+                html += '</span>';
+              }
+              html += '</span>';
+              out += html;
+              continue;
+            }
+            continue;
+          }
+
+          if (SYMBOLS[cmd]) {
+            if (cmd === 'int' || cmd === 'sum' || cmd === 'prod' ||
+                cmd === 'iint' || cmd === 'oint') {
+              out += '<span class="bigop">' + SYMBOLS[cmd] + '</span>';
+            } else {
+              out += SYMBOLS[cmd];
+            }
+            continue;
+          }
+          if (FUNCS[cmd]) {
+            out += '<span class="fn">' + FUNCS[cmd] + '</span>';
+            continue;
+          }
+          if (IGNORE.indexOf(cmd) !== -1) continue;
+
+          /* unknown command — output name */
+          out += cmd;
+          continue;
+        }
+
+        out += ch; i++;
+        continue;
+      }
+
+      out += ch;
+      i++;
+    }
+    return out;
+  }
+  return process(tex);
+}
+
+function stripDollars(s) {
+  var t = String(s).trim();
+  if (t.substring(0,2) === '$$' && t.substring(t.length-2) === '$$') {
+    return t.substring(2, t.length-2);
+  }
+  if (t.charAt(0) === '$' && t.charAt(t.length-1) === '$') {
+    return t.substring(1, t.length-1);
+  }
+  return t;
+}
+
+/* Заменяет $...$ и $$...$$ на отрендеренные формулы внутри текстовых узлов */
+function textWithMath(text) {
+  if (text.indexOf('$') === -1) return null;
+  var out = '';
+  var i = 0;
+  var changed = false;
+  while (i < text.length) {
+    if (text[i] === '$') {
+      if (text[i+1] === '$') {
+        var endD = text.indexOf('$$', i + 2);
+        if (endD !== -1) {
+          var texD = text.substring(i + 2, endD);
+          out += '<span class="math-display">' + renderTex(texD) + '</span>';
+          i = endD + 2; changed = true; continue;
+        }
+      }
+      var endI = text.indexOf('$', i + 1);
+      if (endI !== -1) {
+        var texI = text.substring(i + 1, endI);
+        out += '<span class="math-inline">' + renderTex(texI) + '</span>';
+        i = endI + 1; changed = true; continue;
+      }
+    }
+    var ch = text[i];
+    if (ch === '<') out += '&lt;';
+    else if (ch === '>') out += '&gt;';
+    else if (ch === '&') out += '&amp;';
+    else out += ch;
+    i++;
+  }
+  return changed ? out : null;
+}
+
+function renderMath(root) {
+  if (!root) root = document.body;
+  /* Собираем текстовые узлы через TreeWalker */
+  var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+  var nodes = [];
+  var n;
+  while (n = walker.nextNode()) {
+    /* пропускаем скрипты и стили */
+    var p = n.parentNode;
+    if (!p) continue;
+    var tag = p.nodeName;
+    if (tag === 'SCRIPT' || tag === 'STYLE') continue;
+    if (n.nodeValue.indexOf('$') === -1) continue;
+    nodes.push(n);
+  }
+  for (var k = 0; k < nodes.length; k++) {
+    var node = nodes[k];
+    var html = textWithMath(node.nodeValue);
+    if (html === null) continue;
+    var span = document.createElement('span');
+    span.innerHTML = html;
+    node.parentNode.replaceChild(span, node);
+  }
+}
+
+/* ============================================================
+   2. ДАННЫЕ ЗАДАЧ
+   ============================================================ */
+var TASKS = {
 
   separable: [
-    {
-      difficulty: 1,
+    { difficulty:1,
       statement: "$y' = \\dfrac{x}{y}$",
       answer: "$y^2 = x^2 + C$",
-      accept: ["y^2=x^2+C", "y^2-x^2=C", "y^2 - x^2 = C",
-               "y=\\pm\\sqrt{x^2+C}", "y^2 = x^2 + c"],
+      accept: ["y^2=x^2+C","y^2-x^2=C","y^2 - x^2 = C","y^2 = x^2 + c"],
       hint: "Перепишите $y'$ как $\\dfrac{dy}{dx}$ и умножьте крест-накрест.",
-      solution: `
-        <p>Перепишем производную: $\\dfrac{dy}{dx} = \\dfrac{x}{y}$.</p>
-        <p>Разделяем переменные: $y\\,dy = x\\,dx$.</p>
-        <p>Интегрируем: $\\displaystyle\\int y\\,dy = \\int x\\,dx + C
-          \\;\\Rightarrow\\; \\dfrac{y^2}{2} = \\dfrac{x^2}{2} + C$.</p>
-        <p>Умножаем на 2 и переобозначаем константу:
-          $\\boxed{y^2 = x^2 + C}$.</p>
-      `
+      solution: "<p>Перепишем: $\\dfrac{dy}{dx} = \\dfrac{x}{y}$.</p>" +
+                "<p>Разделяем: $y \\, dy = x \\, dx$.</p>" +
+                "<p>Интегрируем: $\\int y \\, dy = \\int x \\, dx + C \\Rightarrow \\dfrac{y^2}{2} = \\dfrac{x^2}{2} + C$.</p>" +
+                "<p>Умножаем на 2 и переобозначаем константу: $\\boxed{y^2 = x^2 + C}$.</p>"
     },
-    {
-      difficulty: 1,
+    { difficulty:1,
       statement: "$y' = y$",
-      answer: "$y = Ce^{x}$",
-      accept: ["y=Ce^x", "y=C e^x", "y=c e^x", "y=C\\cdot e^x"],
+      answer: "$y = C e^{x}$",
+      accept: ["y=Ce^x","y=C e^x","y=c e^x","y=c*e^x","y=C*e^x"],
       hint: "Разделите: $\\dfrac{dy}{y} = dx$.",
-      solution: `
-        <p>$\\dfrac{dy}{dx} = y \\Rightarrow \\dfrac{dy}{y} = dx$.</p>
-        <p>Интегрируем: $\\ln|y| = x + C_1 \\Rightarrow y = C e^{x}$.</p>
-        <p>Ответ: $\\boxed{y = Ce^{x}}$.</p>
-      `
+      solution: "<p>$\\dfrac{dy}{dx} = y \\Rightarrow \\dfrac{dy}{y} = dx$.</p>" +
+                "<p>Интегрируем: $\\ln|y| = x + C_1 \\Rightarrow y = C e^{x}$.</p>" +
+                "<p>Ответ: $\\boxed{y = C e^{x}}$.</p>"
     },
-    {
-      difficulty: 1,
+    { difficulty:1,
       statement: "$y' = -2xy$",
-      answer: "$y = Ce^{-x^2}$",
-      accept: ["y=Ce^{-x^2}", "y=C e^{-x^2}", "y=ce^{-x^2}"],
-      hint: "Разделите: $\\dfrac{dy}{y} = -2x\\,dx$.",
-      solution: `
-        <p>$\\dfrac{dy}{y} = -2x\\,dx$.</p>
-        <p>$\\ln|y| = -x^2 + C_1 \\Rightarrow \\boxed{y = Ce^{-x^2}}$.</p>
-      `
+      answer: "$y = C e^{-x^2}$",
+      accept: ["y=Ce^{-x^2}","y=C e^{-x^2}","y=c e^{-x^2}"],
+      hint: "Разделите: $\\dfrac{dy}{y} = -2x \\, dx$.",
+      solution: "<p>$\\dfrac{dy}{y} = -2x \\, dx$.</p>" +
+                "<p>$\\ln|y| = -x^2 + C_1 \\Rightarrow \\boxed{y = C e^{-x^2}}$.</p>"
     },
-    {
-      difficulty: 2,
+    { difficulty:2,
       statement: "$y' = x(1 + y^2)$",
-      answer: "$\\arctan y = \\dfrac{x^2}{2} + C$",
-      accept: ["arctg y = x^2/2 + C", "arctan y = x^2/2 + C",
-               "arctg(y) = x^2/2 + C", "y = tg(x^2/2 + C)"],
-      hint: "Разделите: $\\dfrac{dy}{1+y^2} = x\\,dx$.",
-      solution: `
-        <p>Разделяем: $\\dfrac{dy}{1+y^2} = x\\,dx$.</p>
-        <p>Интегрируем: $\\arctan y = \\dfrac{x^2}{2} + C$.</p>
-        <p>Общий интеграл: $\\boxed{\\arctan y = \\dfrac{x^2}{2} + C}$.</p>
-        <p>Можно выразить $y$: $y = \\tan\\!\\left(\\dfrac{x^2}{2}+C\\right)$.</p>
-      `
+      answer: "$\\arctan y = x^2/2 + C$",
+      accept: ["arctg y = x^2/2 + C","arctan y = x^2/2 + C",
+               "arctg(y) = x^2/2 + C","y = tg(x^2/2 + C)"],
+      hint: "Разделите: $\\dfrac{dy}{1 + y^2} = x \\, dx$.",
+      solution: "<p>Разделяем: $\\dfrac{dy}{1 + y^2} = x \\, dx$.</p>" +
+                "<p>Интегрируем: $\\arctan y = \\dfrac{x^2}{2} + C$.</p>" +
+                "<p>Общий интеграл: $\\boxed{\\arctan y = \\dfrac{x^2}{2} + C}$.</p>"
     },
-    {
-      difficulty: 2,
+    { difficulty:2,
       statement: "$y' = e^{x+y}$",
       answer: "$e^{x} + e^{-y} = C$",
-      accept: ["e^x + e^{-y} = C", "e^x+e^{-y}=C", "e^{-y} = C - e^x"],
+      accept: ["e^x + e^{-y} = C","e^x+e^{-y}=C","e^{-y} = C - e^x"],
       hint: "$e^{x+y} = e^x \\cdot e^y$, затем разделите переменные.",
-      solution: `
-        <p>Перепишем: $e^{x+y} = e^x e^y$. Тогда
-          $\\dfrac{dy}{e^{y}} = e^x\\,dx$, то есть $e^{-y}\\,dy = e^x\\,dx$.</p>
-        <p>Интегрируем: $-e^{-y} = e^{x} + C$, или $e^{x} + e^{-y} = C$.</p>
-        <p>Ответ: $\\boxed{e^{x} + e^{-y} = C}$.</p>
-      `
+      solution: "<p>$e^{x+y} = e^x \\cdot e^y$. Тогда $e^{-y} \\, dy = e^x \\, dx$.</p>" +
+                "<p>Интегрируем: $-e^{-y} = e^x + C$, или $e^x + e^{-y} = C$.</p>" +
+                "<p>Ответ: $\\boxed{e^x + e^{-y} = C}$.</p>"
     },
-    {
-      difficulty: 2,
+    { difficulty:2,
+      statement: "$(1 + x^2) \\, dy + y \\, dx = 0$",
+      answer: "$y(1 + x^2) = C$",
+      accept: ["y(1+x^2)=C","y = C/(1+x^2)","y=C/(1+x^2)"],
+      hint: "Разделите: $\\dfrac{dy}{y} = -\\dfrac{dx}{1 + x^2}$.",
+      solution: "<p>$(1+x^2) \\, dy = -y \\, dx \\Rightarrow \\dfrac{dy}{y} = -\\dfrac{dx}{1+x^2}$.</p>" +
+                "<p>Интегрируем: $\\ln|y| = -\\arctan x + C_1$.</p>" +
+                "<p>Общий интеграл: $\\boxed{y(1+x^2) = C}$.</p>"
+    },
+    { difficulty:3,
+      statement: "Найти частное решение: $y' = \\dfrac{x^2 + 1}{y^2 + 1}$, $y(0) = 1$.",
+      answer: "$y^3 + 3y = x^3 + 3x + 4$",
+      accept: ["y^3+3y=x^3+3x+4","y^3 + 3y = x^3 + 3x + 4"],
+      hint: "Разделите: $(y^2 + 1) \\, dy = (x^2 + 1) \\, dx$.",
+      solution: "<p>Разделяем: $(y^2 + 1) \\, dy = (x^2 + 1) \\, dx$.</p>" +
+                "<p>Интегрируем: $\\dfrac{y^3}{3} + y = \\dfrac{x^3}{3} + x + C$.</p>" +
+                "<p>Умножаем на 3: $y^3 + 3y = x^3 + 3x + C_1$.</p>" +
+                "<p>Условие $y(0)=1$: $1 + 3 = 0 + 0 + C_1 \\Rightarrow C_1 = 4$.</p>" +
+                "<p>Ответ: $\\boxed{y^3 + 3y = x^3 + 3x + 4}$.</p>"
+    },
+    { difficulty:3,
       statement: "$y' \\cos x = y \\ln y$",
       answer: "$\\ln|\\ln y| = \\ln|\\sec x + \\tan x| + C$",
-      accept: ["ln|ln y| = ln|tg(x/2)+pi/4| + C",
-               "ln y = C(sec x + tan x)",
-               "ln|ln y| = ln|sec x + tan x| + C"],
-      hint: "Разделите: $\\dfrac{dy}{y\\ln y} = \\dfrac{dx}{\\cos x}$.",
-      solution: `
-        <p>Разделяем: $\\dfrac{dy}{y\\ln y} = \\dfrac{dx}{\\cos x}$.</p>
-        <p>Слева: замена $t=\\ln y$, $dt = \\dfrac{dy}{y}$, интеграл $= \\ln|\\ln y|$.</p>
-        <p>Справа: $\\displaystyle\\int \\dfrac{dx}{\\cos x} = \\ln|\\sec x + \\tan x|$.</p>
-        <p>Ответ: $\\boxed{\\ln|\\ln y| = \\ln|\\sec x + \\tan x| + C}$.</p>
-      `
-    },
-    {
-      difficulty: 3,
-      statement: "$(1 + x^2)\\,dy + y\\,dx = 0$",
-      answer: "$y(1 + x^2) = C$",
-      accept: ["y(1+x^2)=C", "y = C/(1+x^2)", "y(1+x²)=C"],
-      hint: "Разделите: $\\dfrac{dy}{y} = -\\dfrac{dx}{1+x^2}$.",
-      solution: `
-        <p>$(1+x^2)\\,dy = -y\\,dx \\Rightarrow \\dfrac{dy}{y} = -\\dfrac{dx}{1+x^2}$.</p>
-        <p>Интегрируем: $\\ln|y| = -\\arctan x + C_1$.</p>
-        <p>Общий интеграл: $\\boxed{y(1+x^2) = C}$ — либо в виде
-          $y = C e^{-\\arctan x}$.</p>
-      `
-    },
-    {
-      difficulty: 3,
-      statement: "Найти частное решение: $y' = \\dfrac{x^2+1}{y^2+1}$, $y(0) = 1$.",
-      answer: "$y^3 + 3y = x^3 + 3x + 4$",
-      accept: ["y^3+3y=x^3+3x+4", "y^3 + 3y = x^3 + 3x + 4"],
-      hint: "Разделите: $(y^2+1)\\,dy = (x^2+1)\\,dx$.",
-      solution: `
-        <p>Разделяем: $(y^2+1)\\,dy = (x^2+1)\\,dx$.</p>
-        <p>Интегрируем: $\\dfrac{y^3}{3} + y = \\dfrac{x^3}{3} + x + C$.</p>
-        <p>Умножаем на 3: $y^3 + 3y = x^3 + 3x + C_1$.</p>
-        <p>Подставляем $x=0,\\;y=1$: $1 + 3 = 0 + 0 + C_1 \\Rightarrow C_1 = 4$.</p>
-        <p>Ответ: $\\boxed{y^3 + 3y = x^3 + 3x + 4}$.</p>
-      `
+      accept: ["ln|ln y| = ln|sec x + tan x| + C",
+               "ln|ln y| = ln|secx + tanx| + C"],
+      hint: "Разделите: $\\dfrac{dy}{y \\ln y} = \\dfrac{dx}{\\cos x}$.",
+      solution: "<p>Разделяем: $\\dfrac{dy}{y \\ln y} = \\dfrac{dx}{\\cos x}$.</p>" +
+                "<p>Слева замена $t = \\ln y$, интеграл $= \\ln|\\ln y|$.</p>" +
+                "<p>Справа: $\\int \\dfrac{dx}{\\cos x} = \\ln|\\sec x + \\tan x|$.</p>" +
+                "<p>Ответ: $\\boxed{\\ln|\\ln y| = \\ln|\\sec x + \\tan x| + C}$.</p>"
     }
   ],
 
   homogeneous: [
-    {
-      difficulty: 1,
+    { difficulty:1,
       statement: "$y' = \\dfrac{y}{x}$",
       answer: "$y = Cx$",
-      accept: ["y=Cx", "y = C x", "y=cx"],
+      accept: ["y=Cx","y = C x","y=cx"],
       hint: "Замена $y = ux$, тогда $y' = u'x + u$.",
-      solution: `
-        <p>Уравнение однородное. Замена $y = ux$, $y' = u'x + u$:</p>
-        <p>$u'x + u = u \\Rightarrow u'x = 0 \\Rightarrow u = C$.</p>
-        <p>Обратная замена: $\\boxed{y = Cx}$.</p>
-      `
+      solution: "<p>Уравнение однородное. Замена $y = ux$, $y' = u'x + u$:</p>" +
+                "<p>$u'x + u = u \\Rightarrow u'x = 0 \\Rightarrow u = C$.</p>" +
+                "<p>Обратная замена: $\\boxed{y = Cx}$.</p>"
     },
-    {
-      difficulty: 1,
-      statement: "$y' = \\dfrac{x+y}{x}$",
-      answer: "$y = x\\ln|x| + Cx$",
-      accept: ["y=x ln|x| + Cx", "y = x ln|x| + C x", "y=xlnx+Cx",
+    { difficulty:1,
+      statement: "$y' = \\dfrac{x + y}{x}$",
+      answer: "$y = x \\ln|x| + Cx$",
+      accept: ["y=x ln|x| + Cx","y = x ln|x| + C x","y=xlnx+Cx",
                "y = x(ln|x| + C)"],
-      hint: "Замена $y=ux$ даёт $u'x = 1$.",
-      solution: `
-        <p>Замена $y = ux$, $y' = u'x + u$:</p>
-        <p>$u'x + u = 1 + u \\Rightarrow u'x = 1 \\Rightarrow u' = \\dfrac{1}{x}$.</p>
-        <p>$u = \\ln|x| + C$. Тогда $\\boxed{y = x\\ln|x| + Cx}$.</p>
-      `
+      hint: "Замена $y = ux$ даёт $u'x = 1$.",
+      solution: "<p>Замена $y = ux$, $y' = u'x + u$:</p>" +
+                "<p>$u'x + u = 1 + u \\Rightarrow u'x = 1 \\Rightarrow u' = 1/x$.</p>" +
+                "<p>$u = \\ln|x| + C$. Тогда $\\boxed{y = x \\ln|x| + Cx}$.</p>"
     },
-    {
-      difficulty: 2,
+    { difficulty:2,
       statement: "$y' = \\dfrac{x^2 + y^2}{xy}$",
-      answer: "$y^2 = 2x^2\\ln|x| + Cx^2$",
-      accept: ["y^2 = 2x^2 ln|x| + Cx^2", "y^2=2x^2lnx+Cx^2",
-               "y^2 - 2x^2 ln|x| = C x^2"],
+      answer: "$y^2 = 2x^2 \\ln|x| + Cx^2$",
+      accept: ["y^2 = 2x^2 ln|x| + Cx^2","y^2=2x^2lnx+Cx^2",
+               "y^2 - 2x^2 ln|x| = Cx^2"],
       hint: "После замены получится $u'x = \\dfrac{1}{u}$.",
-      solution: `
-        <p>Замена $y=ux$: правая часть $= \\dfrac{x^2 + u^2 x^2}{u x^2}
-          = \\dfrac{1+u^2}{u}$. Тогда</p>
-        <p>$u'x + u = \\dfrac{1+u^2}{u} = \\dfrac{1}{u} + u
-          \\Rightarrow u'x = \\dfrac{1}{u}$.</p>
-        <p>Разделяем: $u\\,du = \\dfrac{dx}{x}$. Интегрируем:
-          $\\dfrac{u^2}{2} = \\ln|x| + C_1 \\Rightarrow u^2 = 2\\ln|x| + C$.</p>
-        <p>Обратная замена $u = y/x$: $\\boxed{y^2 = 2x^2\\ln|x| + Cx^2}$.</p>
-      `
+      solution: "<p>Замена $y = ux$. Тогда правая часть $= \\dfrac{1 + u^2}{u}$, и</p>" +
+                "<p>$u'x + u = \\dfrac{1 + u^2}{u} \\Rightarrow u'x = \\dfrac{1}{u}$.</p>" +
+                "<p>Разделяем: $u \\, du = \\dfrac{dx}{x}$, интегрируем: $\\dfrac{u^2}{2} = \\ln|x| + C_1$.</p>" +
+                "<p>Обратная замена $u = y/x$: $\\boxed{y^2 = 2x^2 \\ln|x| + Cx^2}$.</p>"
     },
-    {
-      difficulty: 2,
+    { difficulty:2,
       statement: "$y' = \\dfrac{y - x}{y + x}$",
-      answer: "$\\ln(x^2 + y^2) + 2\\arctan\\dfrac{y}{x} = C$",
+      answer: "$\\ln(x^2 + y^2) + 2 \\arctan(y/x) = C$",
       accept: ["ln(x^2+y^2) + 2 arctg(y/x) = C",
                "ln(x^2+y^2)+2arctg(y/x)=C",
                "ln(x^2 + y^2) + 2 arctan(y/x) = C"],
-      hint: "После замены $y=ux$ разделите переменные $u$ и $x$.",
-      solution: `
-        <p>Замена $y = ux$: $y' = u'x + u$. Правая часть
-          $= \\dfrac{ux - x}{ux + x} = \\dfrac{u-1}{u+1}$.</p>
-        <p>$u'x + u = \\dfrac{u-1}{u+1}
-          \\Rightarrow u'x = \\dfrac{u-1}{u+1} - u = -\\dfrac{u^2+1}{u+1}$.</p>
-        <p>$\\dfrac{(u+1)\\,du}{u^2+1} = -\\dfrac{dx}{x}$.</p>
-        <p>Интегрируем: $\\dfrac{1}{2}\\ln(u^2+1) + \\arctan u = -\\ln|x| + C_1$.</p>
-        <p>После упрощений: $\\ln(x^2+y^2) + 2\\arctan\\dfrac{y}{x} = C$.</p>
-      `
+      hint: "После замены $y = ux$ разделите переменные.",
+      solution: "<p>Замена $y = ux$, $y' = u'x + u$. Правая часть $= \\dfrac{u - 1}{u + 1}$.</p>" +
+                "<p>$u'x = -\\dfrac{u^2 + 1}{u + 1} \\Rightarrow \\dfrac{(u+1) \\, du}{u^2 + 1} = -\\dfrac{dx}{x}$.</p>" +
+                "<p>Интегрируем: $\\dfrac{1}{2} \\ln(u^2 + 1) + \\arctan u = -\\ln|x| + C_1$.</p>" +
+                "<p>После упрощений: $\\boxed{\\ln(x^2 + y^2) + 2 \\arctan(y/x) = C}$.</p>"
     },
-    {
-      difficulty: 2,
+    { difficulty:2,
       statement: "$xy' = y + \\sqrt{x^2 - y^2}$",
-      answer: "$\\arcsin\\dfrac{y}{x} = \\ln|x| + C$",
-      accept: ["arcsin(y/x) = ln|x| + C", "arcsin(y/x)=lnx+C",
+      answer: "$\\arcsin(y/x) = \\ln|x| + C$",
+      accept: ["arcsin(y/x) = ln|x| + C","arcsin(y/x)=lnx+C",
                "y = x sin(ln|x| + C)"],
-      hint: "После замены получится $\\dfrac{du}{\\sqrt{1-u^2}} = \\dfrac{dx}{x}$.",
-      solution: `
-        <p>Перепишем: $y' = \\dfrac{y + \\sqrt{x^2 - y^2}}{x}$ — однородное.</p>
-        <p>Замена $y = ux$: $u'x + u = u + \\sqrt{1 - u^2}
-          \\Rightarrow u'x = \\sqrt{1-u^2}$.</p>
-        <p>$\\dfrac{du}{\\sqrt{1-u^2}} = \\dfrac{dx}{x}
-          \\Rightarrow \\arcsin u = \\ln|x| + C$.</p>
-        <p>Ответ: $\\boxed{\\arcsin\\dfrac{y}{x} = \\ln|x| + C}$.</p>
-      `
+      hint: "После замены получится $\\dfrac{du}{\\sqrt{1 - u^2}} = \\dfrac{dx}{x}$.",
+      solution: "<p>$y' = \\dfrac{y + \\sqrt{x^2 - y^2}}{x}$ — однородное.</p>" +
+                "<p>Замена $y = ux$: $u'x = \\sqrt{1 - u^2}$.</p>" +
+                "<p>$\\dfrac{du}{\\sqrt{1 - u^2}} = \\dfrac{dx}{x} \\Rightarrow \\arcsin u = \\ln|x| + C$.</p>" +
+                "<p>Ответ: $\\boxed{\\arcsin(y/x) = \\ln|x| + C}$.</p>"
     },
-    {
-      difficulty: 3,
-      statement: "Найти частное решение: $y' = \\dfrac{y}{x} + \\dfrac{x}{y}$,
-                  $y(1) = 2$.",
-      answer: "$y^2 = 2x^2\\ln|x| + 4x^2$",
-      accept: ["y^2 = 2x^2 ln|x| + 4x^2", "y^2=2x^2lnx+4x^2",
+    { difficulty:3,
+      statement: "Частное решение: $y' = \\dfrac{y}{x} + \\dfrac{x}{y}$, $y(1) = 2$.",
+      answer: "$y^2 = 2x^2 \\ln|x| + 4x^2$",
+      accept: ["y^2 = 2x^2 ln|x| + 4x^2","y^2=2x^2lnx+4x^2",
                "y^2 = x^2(2ln|x| + 4)"],
-      hint: "Задача сводится к $y^2 = 2x^2\\ln|x| + Cx^2$.",
-      solution: `
-        <p>Замена $y = ux$: $u'x + u = u + \\dfrac{1}{u}
-          \\Rightarrow u'x = \\dfrac{1}{u}$.</p>
-        <p>$u\\,du = \\dfrac{dx}{x} \\Rightarrow \\dfrac{u^2}{2} = \\ln|x| + C_1
-          \\Rightarrow u^2 = 2\\ln|x| + C$.</p>
-        <p>$y^2 = x^2(2\\ln|x| + C)$.</p>
-        <p>Условие $y(1)=2$: $4 = 1 \\cdot (0 + C) \\Rightarrow C = 4$.</p>
-        <p>Ответ: $\\boxed{y^2 = 2x^2\\ln|x| + 4x^2}$.</p>
-      `
+      hint: "Сначала получите $y^2 = 2x^2 \\ln|x| + Cx^2$.",
+      solution: "<p>Замена $y = ux$: $u'x = \\dfrac{1}{u}$, значит $u^2 = 2\\ln|x| + C$.</p>" +
+                "<p>Тогда $y^2 = x^2 (2 \\ln|x| + C)$.</p>" +
+                "<p>$y(1) = 2$: $4 = 1 \\cdot (0 + C) \\Rightarrow C = 4$.</p>" +
+                "<p>Ответ: $\\boxed{y^2 = 2x^2 \\ln|x| + 4x^2}$.</p>"
     },
-    {
-      difficulty: 3,
-      statement: "$(x^2 + y^2)\\,dx - 2xy\\,dy = 0$",
+    { difficulty:3,
+      statement: "$(x^2 + y^2) \\, dx - 2xy \\, dy = 0$",
       answer: "$y^2 - x^2 = Cx$",
-      accept: ["y^2 - x^2 = Cx", "y^2-x^2=Cx", "y^2 - x^2 = C x"],
-      hint: "Выразите $y' = \\dfrac{x^2+y^2}{2xy}$ и сделайте замену $y=ux$.",
-      solution: `
-        <p>Перепишем: $y' = \\dfrac{x^2+y^2}{2xy}$ — однородное.</p>
-        <p>Замена $y = ux$: $u'x + u = \\dfrac{1+u^2}{2u}$.</p>
-        <p>$u'x = \\dfrac{1+u^2 - 2u^2}{2u} = \\dfrac{1-u^2}{2u}
-          \\Rightarrow \\dfrac{2u\\,du}{1-u^2} = \\dfrac{dx}{x}$.</p>
-        <p>$-\\ln|1-u^2| = \\ln|x| + C_1 \\Rightarrow 1-u^2 = \\dfrac{C}{x^2}$.</p>
-        <p>С учётом $u = y/x$: $x^2 - y^2 = C_1 \\Rightarrow y^2 - x^2 = Cx$.</p>
-      `
+      accept: ["y^2 - x^2 = Cx","y^2-x^2=Cx","y^2 - x^2 = C x"],
+      hint: "Приведите к $y' = \\dfrac{x^2 + y^2}{2xy}$ и сделайте замену $y = ux$.",
+      solution: "<p>$y' = \\dfrac{x^2 + y^2}{2xy}$ — однородное.</p>" +
+                "<p>Замена $y = ux$: $u'x = \\dfrac{1 - u^2}{2u} \\Rightarrow \\dfrac{2u \\, du}{1 - u^2} = \\dfrac{dx}{x}$.</p>" +
+                "<p>$-\\ln|1 - u^2| = \\ln|x| + C_1 \\Rightarrow 1 - u^2 = C / x^2$.</p>" +
+                "<p>С учётом $u = y/x$ получаем $\\boxed{y^2 - x^2 = Cx}$.</p>"
     }
   ],
 
   linear: [
-    {
-      difficulty: 1,
+    { difficulty:1,
       statement: "$y' + y = 1$",
-      answer: "$y = 1 + Ce^{-x}$",
-      accept: ["y=1+Ce^{-x}", "y = 1 + C e^{-x}", "y=1+ce^{-x}"],
-      hint: "Замена $y = uv$, система: $v'+v=0$, $u'v=1$.",
-      solution: `
-        <p>Замена $y = uv$, $y' = u'v + uv'$:</p>
-        <p>$u'v + u(v' + v) = 1$.</p>
-        <p>Система: $\\begin{cases} v' + v = 0 \\\\ u'v = 1 \\end{cases}$.</p>
-        <p>$v = e^{-x}$; тогда $u' = e^{x} \\Rightarrow u = e^{x} + C$.</p>
-        <p>$\\boxed{y = 1 + Ce^{-x}}$.</p>
-      `
+      answer: "$y = 1 + C e^{-x}$",
+      accept: ["y=1+Ce^{-x}","y = 1 + C e^{-x}","y=1+ce^{-x}"],
+      hint: "Замена $y = uv$; система: $v' + v = 0$, $u'v = 1$.",
+      solution: "<p>Замена $y = uv$, $y' = u'v + uv'$: $u'v + u(v' + v) = 1$.</p>" +
+                "<p>Система: $v' + v = 0$, $u'v = 1$.</p>" +
+                "<p>$v = e^{-x}$; $u' = e^x \\Rightarrow u = e^x + C$.</p>" +
+                "<p>$\\boxed{y = 1 + C e^{-x}}$.</p>"
     },
-    {
-      difficulty: 1,
+    { difficulty:1,
       statement: "$y' - 2y = x$",
-      answer: "$y = Ce^{2x} - \\dfrac{x}{2} - \\dfrac{1}{4}$",
-      accept: ["y=Ce^{2x} - x/2 - 1/4", "y = Ce^{2x} - x/2 - 1/4",
+      answer: "$y = C e^{2x} - x/2 - 1/4$",
+      accept: ["y=Ce^{2x} - x/2 - 1/4","y = Ce^{2x} - x/2 - 1/4",
                "y=-x/2-1/4+Ce^{2x}"],
-      hint: "Замена $y=uv$, система: $v'-2v=0$, $u'v=x$.",
-      solution: `
-        <p>Замена $y=uv$: $u'v + u(v' - 2v) = x$.</p>
-        <p>$v' - 2v = 0 \\Rightarrow v = e^{2x}$.</p>
-        <p>$u' e^{2x} = x \\Rightarrow u = \\displaystyle\\int x e^{-2x}\\,dx$.
-          Интегрируем по частям:</p>
-        <p>$u = -\\dfrac{x}{2}e^{-2x} - \\dfrac{1}{4}e^{-2x} + C$.</p>
-        <p>$y = uv = Ce^{2x} - \\dfrac{x}{2} - \\dfrac{1}{4}$.</p>
-      `
+      hint: "Замена $y = uv$; система: $v' - 2v = 0$, $u'v = x$.",
+      solution: "<p>Замена $y = uv$: $u'v + u(v' - 2v) = x$.</p>" +
+                "<p>$v = e^{2x}$. Затем $u' e^{2x} = x \\Rightarrow u = \\int x e^{-2x} \\, dx$ (по частям).</p>" +
+                "<p>$u = -\\dfrac{x}{2} e^{-2x} - \\dfrac{1}{4} e^{-2x} + C$.</p>" +
+                "<p>$\\boxed{y = C e^{2x} - \\dfrac{x}{2} - \\dfrac{1}{4}}$.</p>"
     },
-    {
-      difficulty: 2,
+    { difficulty:2,
       statement: "$y' + \\dfrac{y}{x} = x$",
-      answer: "$y = \\dfrac{x^2}{3} + \\dfrac{C}{x}$",
-      accept: ["y = x^2/3 + C/x", "y=x^2/3+C/x", "y = C/x + x^2/3"],
+      answer: "$y = x^2/3 + C/x$",
+      accept: ["y = x^2/3 + C/x","y=x^2/3+C/x","y = C/x + x^2/3"],
       hint: "Система: $v' + v/x = 0$, $u'v = x$.",
-      solution: `
-        <p>Замена $y=uv$: $u'v + u\\!\\left(v' + \\dfrac{v}{x}\\right) = x$.</p>
-        <p>$v' + \\dfrac{v}{x} = 0 \\Rightarrow \\dfrac{dv}{v} = -\\dfrac{dx}{x}
-          \\Rightarrow v = \\dfrac{1}{x}$.</p>
-        <p>$u' \\cdot \\dfrac{1}{x} = x \\Rightarrow u' = x^2
-          \\Rightarrow u = \\dfrac{x^3}{3} + C$.</p>
-        <p>$\\boxed{y = \\dfrac{x^2}{3} + \\dfrac{C}{x}}$.</p>
-      `
+      solution: "<p>Замена $y = uv$: $u'v + u(v' + v/x) = x$.</p>" +
+                "<p>$v = 1/x$, $u' = x^2 \\Rightarrow u = x^3/3 + C$.</p>" +
+                "<p>$\\boxed{y = \\dfrac{x^2}{3} + \\dfrac{C}{x}}$.</p>"
     },
-    {
-      difficulty: 2,
+    { difficulty:2,
       statement: "$y' - y = e^{x}$",
-      answer: "$y = (x + C)e^{x}$",
-      accept: ["y=(x+C)e^x", "y=(x+C)e^{x}", "y=e^x(x+C)",
-               "y=xe^x+Ce^x"],
-      hint: "Система: $v'-v=0$, $u'v=e^{x}$.",
-      solution: `
-        <p>Замена $y=uv$: $u'v + u(v' - v) = e^{x}$.</p>
-        <p>$v' - v = 0 \\Rightarrow v = e^{x}$.</p>
-        <p>$u' e^{x} = e^{x} \\Rightarrow u' = 1 \\Rightarrow u = x + C$.</p>
-        <p>$\\boxed{y = (x + C)e^{x}}$.</p>
-      `
+      answer: "$y = (x + C) e^{x}$",
+      accept: ["y=(x+C)e^x","y=(x+C)e^{x}","y=e^x(x+C)","y=xe^x+Ce^x"],
+      hint: "Система: $v' - v = 0$, $u'v = e^x$.",
+      solution: "<p>$v = e^x$; $u' e^x = e^x \\Rightarrow u = x + C$.</p>" +
+                "<p>$\\boxed{y = (x + C) e^{x}}$.</p>"
     },
-    {
-      difficulty: 2,
+    { difficulty:2,
       statement: "$xy' + y = x^2$",
-      answer: "$y = \\dfrac{x^2}{3} + \\dfrac{C}{x}$",
-      accept: ["y = x^2/3 + C/x", "y=x^2/3+C/x"],
-      hint: "Сначала приведите к виду $y' + \\dfrac{y}{x} = x$.",
-      solution: `
-        <p>Делим на $x$: $y' + \\dfrac{y}{x} = x$ — линейное.</p>
-        <p>Замена $y=uv$: $u'v + u\\!\\left(v' + \\dfrac{v}{x}\\right) = x$.</p>
-        <p>$v = \\dfrac{1}{x}$, $u' = x^2 \\Rightarrow u = \\dfrac{x^3}{3} + C$.</p>
-        <p>$\\boxed{y = \\dfrac{x^2}{3} + \\dfrac{C}{x}}$.</p>
-      `
+      answer: "$y = x^2/3 + C/x$",
+      accept: ["y = x^2/3 + C/x","y=x^2/3+C/x"],
+      hint: "Разделите на $x$: получится $y' + y/x = x$.",
+      solution: "<p>Делим на $x$: $y' + y/x = x$ — линейное.</p>" +
+                "<p>$v = 1/x$, $u' = x^2 \\Rightarrow u = x^3/3 + C$.</p>" +
+                "<p>$\\boxed{y = \\dfrac{x^2}{3} + \\dfrac{C}{x}}$.</p>"
     },
-    {
-      difficulty: 3,
-      statement: "$y' + 2xy = 2x\\,e^{-x^2}$",
-      answer: "$y = (x^2 + C)e^{-x^2}$",
-      accept: ["y=(x^2+C)e^{-x^2}", "y=(x^2+C)e^{-x²}",
-               "y=e^{-x^2}(x^2+C)"],
-      hint: "Система: $v' + 2xv = 0$, $u'v = 2xe^{-x^2}$.",
-      solution: `
-        <p>Замена $y=uv$: $u'v + u(v' + 2xv) = 2xe^{-x^2}$.</p>
-        <p>$v' + 2xv = 0 \\Rightarrow v = e^{-x^2}$.</p>
-        <p>$u' e^{-x^2} = 2x e^{-x^2} \\Rightarrow u' = 2x
-          \\Rightarrow u = x^2 + C$.</p>
-        <p>$\\boxed{y = (x^2 + C)e^{-x^2}}$.</p>
-      `
+    { difficulty:3,
+      statement: "$y' + 2xy = 2x \\, e^{-x^2}$",
+      answer: "$y = (x^2 + C) e^{-x^2}$",
+      accept: ["y=(x^2+C)e^{-x^2}","y=e^{-x^2}(x^2+C)"],
+      hint: "Система: $v' + 2xv = 0$, $u'v = 2x e^{-x^2}$.",
+      solution: "<p>$v = e^{-x^2}$; $u' = 2x \\Rightarrow u = x^2 + C$.</p>" +
+                "<p>$\\boxed{y = (x^2 + C) e^{-x^2}}$.</p>"
     },
-    {
-      difficulty: 3,
+    { difficulty:3,
       statement: "Задача Коши: $y' - \\dfrac{2y}{x} = x^3$, $y(1) = 0$.",
-      answer: "$y = \\dfrac{x^2(x^2-1)}{2}$",
-      accept: ["y=x^3(x-1)", "y = x^3(x-1)", "y=x^4-x^3",
-               "y = (x^4 - x^2)/2", "y=(x^4-x^2)/2"],
-      hint: "Общее решение: $y = \\dfrac{x^4}{2} + Cx^2$.",
-      solution: `
-        <p>Замена $y=uv$: $u'v + u\\!\\left(v' - \\dfrac{2v}{x}\\right) = x^3$.</p>
-        <p>$v' - \\dfrac{2v}{x} = 0 \\Rightarrow \\dfrac{dv}{v} = \\dfrac{2\\,dx}{x}
-          \\Rightarrow v = x^2$.</p>
-        <p>$u' x^2 = x^3 \\Rightarrow u' = x \\Rightarrow u = \\dfrac{x^2}{2} + C$.</p>
-        <p>$y = x^2\\!\\left(\\dfrac{x^2}{2} + C\\right) = \\dfrac{x^4}{2} + Cx^2$.</p>
-        <p>Условие $y(1)=0$: $0 = \\dfrac{1}{2} + C \\Rightarrow C = -\\dfrac{1}{2}$.</p>
-        <p>$y = \\dfrac{x^4}{2} - \\dfrac{x^2}{2} = \\dfrac{x^2(x^2-1)}{2}$.</p>
-        <p>Ответ: $\\boxed{y = \\dfrac{x^2(x^2-1)}{2}}$.</p>
-      `
+      answer: "$y = x^2(x^2 - 1)/2$",
+      accept: ["y=x^3(x-1)","y = x^3(x-1)","y=x^4-x^3",
+               "y = (x^4 - x^2)/2","y=(x^4-x^2)/2"],
+      hint: "Общее решение: $y = x^4/2 + Cx^2$.",
+      solution: "<p>$v = x^2$, $u' = x \\Rightarrow u = x^2/2 + C$.</p>" +
+                "<p>$y = x^2(x^2/2 + C) = x^4/2 + Cx^2$.</p>" +
+                "<p>$y(1) = 0$: $0 = 1/2 + C \\Rightarrow C = -1/2$.</p>" +
+                "<p>$\\boxed{y = \\dfrac{x^2(x^2 - 1)}{2}}$.</p>"
     },
-    {
-      difficulty: 3,
-      statement: "$y' + y\\tan x = \\dfrac{1}{\\cos x}$",
-      answer: "$y = \\sin x + C\\cos x$",
-      accept: ["y=(x+C)cos x", "y=(x+C)\\cos x", "y=cos x (x+C)",
-               "y = sin x + C cos x", "y=sinx+Ccosx"],
-      hint: "Система: $v' + v\\tan x = 0$, $u'v = 1/\\cos x$.",
-      solution: `
-        <p>Замена $y=uv$: $u'v + u(v' + v\\tan x) = \\dfrac{1}{\\cos x}$.</p>
-        <p>$v' + v\\tan x = 0 \\Rightarrow \\dfrac{dv}{v} = -\\tan x\\,dx
-          \\Rightarrow \\ln|v| = \\ln|\\cos x| \\Rightarrow v = \\cos x$.</p>
-        <p>$u' \\cos x = \\dfrac{1}{\\cos x} \\Rightarrow u' = \\dfrac{1}{\\cos^2 x}
-          \\Rightarrow u = \\tan x + C$.</p>
-        <p>$y = (\\tan x + C)\\cos x = \\sin x + C\\cos x$.</p>
-        <p>Ответ: $\\boxed{y = \\sin x + C\\cos x}$.</p>
-      `
+    { difficulty:3,
+      statement: "$y' + y \\tan x = \\dfrac{1}{\\cos x}$",
+      answer: "$y = \\sin x + C \\cos x$",
+      accept: ["y = sin x + C cos x","y=sinx+Ccosx","y=sinx + C cosx"],
+      hint: "Система: $v' + v \\tan x = 0$, $u'v = 1/\\cos x$.",
+      solution: "<p>$v' + v \\tan x = 0 \\Rightarrow v = \\cos x$.</p>" +
+                "<p>$u' \\cos x = 1/\\cos x \\Rightarrow u = \\tan x + C$.</p>" +
+                "<p>$y = (\\tan x + C) \\cos x = \\sin x + C \\cos x$.</p>" +
+                "<p>Ответ: $\\boxed{y = \\sin x + C \\cos x}$.</p>"
     }
   ]
 };
 
 /* ============================================================
-   ЛОГИКА ТРЕНАЖЁРА
+   3. ЛОГИКА ТРЕНАЖЁРА
    ============================================================ */
-
-const STORAGE_KEY = 'de_trainer_progress_v1';
-let progress = {};
-try {
-  progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-} catch (e) { progress = {}; }
+var STORAGE_KEY = 'de_trainer_progress_v2';
+var progress = {};
+try { progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+catch (e) { progress = {}; }
 
 function saveProgress() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
@@ -782,74 +945,59 @@ function saveProgress() {
 }
 
 function updateProgressBar() {
-  const total = Object.values(TASKS).reduce((s, arr) => s + arr.length, 0);
-  const solved = Object.values(progress).filter(Boolean).length;
-  const el = document.getElementById('progress-count');
+  var total = 0;
+  Object.keys(TASKS).forEach(function (k) { total += TASKS[k].length; });
+  var solved = Object.keys(progress).filter(function (k) { return progress[k]; }).length;
+  var el = document.getElementById('progress-count');
   if (el) el.textContent = solved + ' / ' + total;
 }
 
-/* --- Универсальный рендер формул --- */
-function renderMath(el) {
-  if (typeof window.renderMathInElement !== 'function') return false;
-  try {
-    window.renderMathInElement(el || document.body, {
-      delimiters: [
-        { left: '$$', right: '$$', display: true },
-        { left: '\\[', right: '\\]', display: true },
-        { left: '$',  right: '$',  display: false },
-        { left: '\\(', right: '\\)', display: false }
-      ],
-      throwOnError: false
-    });
-    return true;
-  } catch (e) {
-    console.error('KaTeX render error:', e);
-    return false;
-  }
-}
-
-/* --- Нормализация ответа --- */
 function normalize(s) {
-  return String(s)
-    .toLowerCase()
+  return String(s).toLowerCase()
     .replace(/\s+/g, '')
     .replace(/[·⋅×]/g, '*')
     .replace(/\*/g, '')
-    .replace(/−|–|—/g, '-')
+    .replace(/[−–—]/g, '-')
     .replace(/,/g, '.')
-    .replace(/²/g, '^2')
-    .replace(/³/g, '^3')
-    .replace(/\{/g, '(').replace(/\}/g, ')')
+    .replace(/²/g, '^2').replace(/³/g, '^3')
+    .replace(/[{}]/g, function (m) { return m === '{' ? '(' : ')'; })
     .replace(/\\left|\\right/g, '')
     .replace(/\\ln/g, 'ln')
     .replace(/\\arctan|\\arctg/g, 'arctg')
     .replace(/\\tan|\\tg/g, 'tg')
-    .replace(/\\sin/g, 'sin')
-    .replace(/\\cos/g, 'cos')
-    .replace(/\\sqrt/g, 'sqrt')
-    .replace(/\\pm/g, '±')
+    .replace(/\\sin/g, 'sin').replace(/\\cos/g, 'cos')
+    .replace(/\\sqrt/g, 'sqrt').replace(/\\pm/g, '±')
     .replace(/\\cdot/g, '');
 }
 
 function checkAnswer(userAnswer, task) {
-  const u = normalize(userAnswer);
+  var u = normalize(userAnswer);
   if (!u) return false;
-  const candidates = [task.answer].concat(task.accept || []).map(normalize);
-  return candidates.some(function (c) { return c === u; });
+  var candidates = [task.answer].concat(task.accept || []);
+  for (var i = 0; i < candidates.length; i++) {
+    if (normalize(candidates[i]) === u) return true;
+  }
+  return false;
 }
 
-/* --- Создание DOM-элемента задачи --- */
-function buildTaskEl(task, idx, sectionKey) {
-  const id = sectionKey + '-' + idx;
-  const stars = '★'.repeat(task.difficulty) + '☆'.repeat(3 - task.difficulty);
-  const isSolved = !!progress[id];
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-  const div = document.createElement('div');
+function renderAnswerMath(answer) {
+  return '<span class="math-inline">' + renderTex(stripDollars(answer)) + '</span>';
+}
+
+function buildTaskEl(task, idx, sectionKey) {
+  var id = sectionKey + '-' + idx;
+  var stars = '★'.repeat(task.difficulty) + '☆'.repeat(3 - task.difficulty);
+  var isSolved = !!progress[id];
+  var userVal = (isSolved && progress[id].user) ? progress[id].user : '';
+
+  var div = document.createElement('div');
   div.className = 'task' + (isSolved ? ' solved' : '');
   div.dataset.id = id;
-
-  const userVal = (isSolved && progress[id].user) ? progress[id].user : '';
-
   div.innerHTML =
     '<div class="task-head">' +
       '<span class="task-num">Задача ' + (idx + 1) + '</span>' +
@@ -859,7 +1007,7 @@ function buildTaskEl(task, idx, sectionKey) {
     '<div class="task-statement">' + task.statement + '</div>' +
     '<div class="answer-row">' +
       '<input type="text" placeholder="Введите ответ (например, y = Ce^x)" value="' +
-        userVal.replace(/"/g, '&quot;') + '">' +
+        esc(userVal) + '">' +
     '</div>' +
     '<div class="answer-row">' +
       '<button class="btn-primary" data-action="check">Проверить ответ</button>' +
@@ -868,17 +1016,12 @@ function buildTaskEl(task, idx, sectionKey) {
     '</div>' +
     '<div class="feedback"></div>' +
     '<div class="hint-block"></div>' +
-    '<div class="solution-block">' +
-      '<h4>Решение</h4>' +
-      task.solution +
-    '</div>';
-
+    '<div class="solution-block"><h4>Решение</h4>' + task.solution + '</div>';
   return div;
 }
 
-/* --- Инициализация раздела --- */
 function initSection(sectionKey, containerId) {
-  const container = document.getElementById(containerId);
+  var container = document.getElementById(containerId);
   if (!container) return;
 
   TASKS[sectionKey].forEach(function (task, i) {
@@ -886,26 +1029,25 @@ function initSection(sectionKey, containerId) {
   });
 
   container.addEventListener('click', function (e) {
-    const btn = e.target.closest('button[data-action]');
+    var btn = e.target.closest('button[data-action]');
     if (!btn) return;
-    const taskEl = btn.closest('.task');
-    const id = taskEl.dataset.id;
-    const idx = parseInt(id.split('-')[1], 10);
-    const task = TASKS[sectionKey][idx];
-
-    const feedback = taskEl.querySelector('.feedback');
-    const hintEl   = taskEl.querySelector('.hint-block');
-    const solEl    = taskEl.querySelector('.solution-block');
-    const input    = taskEl.querySelector('input');
+    var taskEl = btn.closest('.task');
+    var id = taskEl.dataset.id;
+    var idx = parseInt(id.split('-')[1], 10);
+    var task = TASKS[sectionKey][idx];
+    var feedback = taskEl.querySelector('.feedback');
+    var hintEl = taskEl.querySelector('.hint-block');
+    var solEl = taskEl.querySelector('.solution-block');
+    var input = taskEl.querySelector('input');
 
     if (btn.dataset.action === 'check') {
-      const user = input.value.trim();
+      var user = input.value.trim();
       if (!user) {
         feedback.className = 'feedback info';
         feedback.textContent = 'Введите ответ.';
         return;
       }
-      const ok = checkAnswer(user, task);
+      var ok = checkAnswer(user, task);
       if (ok) {
         feedback.className = 'feedback ok';
         feedback.textContent = '✅ Верно! Ответ совпадает с эталоном.';
@@ -913,7 +1055,7 @@ function initSection(sectionKey, containerId) {
         progress[id] = { solved: true, user: user };
         saveProgress();
         if (!taskEl.querySelector('.badge')) {
-          const b = document.createElement('span');
+          var b = document.createElement('span');
           b.className = 'badge';
           b.textContent = 'решено';
           taskEl.querySelector('.task-head').appendChild(b);
@@ -921,19 +1063,17 @@ function initSection(sectionKey, containerId) {
       } else {
         feedback.className = 'feedback err';
         feedback.innerHTML =
-          '❌ Пока не совпадает.<br>' +
-          '<b>Эталон:</b> ' + task.answer + '<br>' +
-          '<span style="font-size:13.5px;color:#7f1d1d">' +
+          '❌ Пока не совпадает.<br><b>Эталон:</b> ' + renderAnswerMath(task.answer) +
+          '<br><span style="font-size:13.5px;color:#7f1d1d">' +
           'Возможно, ваш ответ эквивалентен — проверьте вручную ' +
           'или нажмите «Показать решение».</span>';
       }
-      renderMath(feedback);
     }
 
     if (btn.dataset.action === 'hint') {
-      const willShow = hintEl.style.display !== 'block';
-      hintEl.style.display = willShow ? 'block' : 'none';
-      if (willShow && !hintEl.dataset.rendered) {
+      var showHint = hintEl.style.display !== 'block';
+      hintEl.style.display = showHint ? 'block' : 'none';
+      if (showHint && !hintEl.dataset.rendered) {
         hintEl.innerHTML = task.hint || 'Подсказка отсутствует.';
         renderMath(hintEl);
         hintEl.dataset.rendered = '1';
@@ -941,111 +1081,56 @@ function initSection(sectionKey, containerId) {
     }
 
     if (btn.dataset.action === 'solution') {
-      const willShow = solEl.style.display !== 'block';
-      solEl.style.display = willShow ? 'block' : 'none';
-      if (willShow && !solEl.dataset.rendered) {
+      var showSol = solEl.style.display !== 'block';
+      solEl.style.display = showSol ? 'block' : 'none';
+      if (showSol && !solEl.dataset.rendered) {
         renderMath(solEl);
         solEl.dataset.rendered = '1';
       }
-      if (willShow) {
+      if (showSol) {
         feedback.className = 'feedback info';
-        feedback.innerHTML = '📘 Эталонный ответ: <b>' + task.answer + '</b>';
-        renderMath(feedback);
+        feedback.innerHTML = '📘 Эталонный ответ: ' + renderAnswerMath(task.answer);
       }
     }
   });
 
-  // Enter в поле = «Проверить»
   container.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
       e.preventDefault();
-      const taskEl = e.target.closest('.task');
-      taskEl.querySelector('button[data-action="check"]').click();
+      e.target.closest('.task').querySelector('button[data-action="check"]').click();
     }
   });
 }
 
-/* --- Навигация по разделам --- */
 function initNav() {
-  const links = document.querySelectorAll('#nav a');
+  var links = document.querySelectorAll('#nav a');
   links.forEach(function (a) {
     a.addEventListener('click', function () {
       links.forEach(function (x) { x.classList.remove('active'); });
       a.classList.add('active');
     });
   });
-
   if (typeof IntersectionObserver !== 'undefined') {
-    const observer = new IntersectionObserver(function (entries) {
+    var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          const id = entry.target.id;
           links.forEach(function (x) {
-            x.classList.toggle('active', x.dataset.target === id);
+            x.classList.toggle('active', x.dataset.target === entry.target.id);
           });
         }
       });
     }, { rootMargin: '-40% 0px -55% 0px' });
-
-    document.querySelectorAll('section').forEach(function (s) {
-      observer.observe(s);
-    });
+    document.querySelectorAll('section').forEach(function (s) { observer.observe(s); });
   }
 }
 
-/* --- Проверка загрузки KaTeX с fallback --- */
-function ensureKatexLoaded() {
-  if (typeof window.renderMathInElement === 'function') return;
-
-  // Попробуем подгрузить альтернативный CDN
-  const fallbacks = [
-    'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
-    'https://unpkg.com/katex@0.16.9/dist/katex.min.css'
-  ];
-  fallbacks.forEach(function (href) {
-    const l = document.createElement('link');
-    l.rel = 'stylesheet';
-    l.href = href;
-    document.head.appendChild(l);
-  });
-
-  const scripts = [
-    'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js',
-    'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js'
-  ];
-  let loaded = 0;
-  scripts.forEach(function (src) {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = function () {
-      loaded++;
-      if (loaded === scripts.length) {
-        renderMath(document.body);
-      }
-    };
-    document.head.appendChild(s);
-  });
-
-  // Если через 4 секунды KaTeX так и не появился — показываем баннер
-  setTimeout(function () {
-    if (typeof window.renderMathInElement !== 'function') {
-      const warn = document.getElementById('katex-warning');
-      if (warn) warn.style.display = 'block';
-    }
-  }, 4000);
-}
-
-/* --- Старт --- */
 function start() {
-  ensureKatexLoaded();
-
   initSection('separable',   'tasks-separable');
   initSection('homogeneous', 'tasks-homogeneous');
   initSection('linear',      'tasks-linear');
   initNav();
   updateProgressBar();
-
-  // Первичный рендер теории (после того как KaTeX гарантированно доступен)
+  /* Первичный рендер всей страницы (теория + задачи) */
   renderMath(document.body);
 }
 
