@@ -5,15 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Тренажёр: Дифференциальные уравнения 1-го порядка</title>
 
+<!-- KaTeX: CSS + JS + auto-render (порядок важен, без defer) -->
 <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-      crossorigin="anonymous">
-<script defer
-        src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
-        crossorigin="anonymous"></script>
-<script defer
-        src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-        crossorigin="anonymous"></script>
+      href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
 
 <style>
 :root{
@@ -29,6 +25,13 @@ body{
 }
 a{color:var(--accent); text-decoration:none}
 a:hover{text-decoration:underline}
+
+#katex-warning{
+  display:none; background:#fee2e2; color:#7f1d1d;
+  padding:14px 20px; border-bottom:2px solid #fca5a5;
+  font-size:14.5px; text-align:center;
+}
+#katex-warning b{color:#7f1d1d}
 
 /* ---------- Layout ---------- */
 #app{display:flex; min-height:100vh}
@@ -102,9 +105,7 @@ section p{margin:10px 0}
 }
 .task.solved{border-color:#86efac; background:#f0fdf4}
 .task-head{display:flex; align-items:center; gap:10px; margin-bottom:12px}
-.task-num{
-  font-weight:700; color:var(--accent); font-size:15px;
-}
+.task-num{font-weight:700; color:var(--accent); font-size:15px}
 .stars{color:#f59e0b; letter-spacing:1px; font-size:14px}
 .badge{
   font-size:11.5px; padding:2px 8px; border-radius:10px;
@@ -151,9 +152,7 @@ button{
   font-size:15.5px;
 }
 .solution-block h4{margin:0 0 10px; color:var(--accent); font-size:16px}
-.solution-step{margin:10px 0}
 
-/* KaTeX tweaks */
 .katex{font-size:1.02em}
 .katex-display{overflow-x:auto; overflow-y:hidden; padding:2px 0}
 
@@ -164,6 +163,12 @@ footer{
 </style>
 </head>
 <body>
+
+<div id="katex-warning">
+  <b>⚠ Формулы не отображаются.</b>
+  Похоже, что библиотека KaTeX не загрузилась с CDN.
+  Проверьте интернет или доступ к <code>cdnjs.cloudflare.com</code>.
+</div>
 
 <div id="app">
   <aside id="sidebar">
@@ -204,9 +209,9 @@ footer{
 
         <div class="formula-block">
           <b>Общее решение</b> — множество всех функций, удовлетворяющих уравнению.
-          Обычно содержит произвольную постоянную $C$: $y = \varphi(x, C)$.<br>
+          Обычно содержит произвольную постоянную $C$: $y = \varphi(x, C)$.<br><br>
           <b>Общий интеграл</b> — та же идея, но функция задана неявно:
-          $\Phi(x, y) = C$.<br>
+          $\Phi(x, y) = C$.<br><br>
           <b>Частное решение</b> — конкретная функция при фиксированном $C$.
         </div>
 
@@ -235,10 +240,9 @@ footer{
       <div class="theory-card">
         <span class="label">Теория</span>
 
-        <p><b>Определение.</b> Уравнение вида
-          $$y' = f(x)\, g(y)$$
-          называется уравнением с разделяющимися переменными.
-        </p>
+        <p><b>Определение.</b> Уравнение вида</p>
+        $$y' = f(x)\, g(y)$$
+        <p>называется уравнением с разделяющимися переменными.</p>
 
         <h3>Алгоритм решения</h3>
         <ol>
@@ -264,15 +268,15 @@ footer{
         Разделяем: $y\,dy = x\,dx$. Интегрируем:</p>
         $$\int y\,dy = \int x\,dx + C \;\Rightarrow\;
           \frac{y^2}{2} = \frac{x^2}{2} + C.$$
-        <p>Умножим на 2 и переобозначим $C$: общий интеграл
-          $$\boxed{\,y^2 = x^2 + C\,}.$$</p>
+        <p>Умножим на 2 и переобозначим $C$: общий интеграл</p>
+        $$y^2 = x^2 + C.$$
 
         <h3>Пример 2 (задача Коши)</h3>
         <p>Найти частное решение $y' = -2xy$, если $y(0) = 1$.</p>
         <p>$\dfrac{dy}{dx} = -2xy$. Разделяем: $\dfrac{dy}{y} = -2x\,dx$.
         Интегрируем: $\ln|y| = -x^2 + C$. Тогда $y = C_1 e^{-x^2}$.</p>
         <p>Подставляем $x=0,\;y=1$: $1 = C_1 e^0 \Rightarrow C_1 = 1$.
-        Частное решение: $\boxed{y = e^{-x^2}}$.</p>
+        Частное решение: $y = e^{-x^2}$.</p>
 
         <div class="tip">
           <b>Технический приём.</b> Если в правой части появляется логарифм,
@@ -296,8 +300,8 @@ footer{
         <span class="label">Теория</span>
 
         <p><b>Определение.</b> Уравнение $y' = f(x,y)$ называется <b>однородным</b>,
-        если функция $f$ удовлетворяет условию
-        $$f(\lambda x, \lambda y) = f(x, y) \quad \forall \lambda \neq 0.$$</p>
+        если функция $f$ удовлетворяет условию</p>
+        $$f(\lambda x, \lambda y) = f(x, y) \quad \forall \lambda \neq 0.$$
 
         <h3>Проверка на однородность</h3>
         <p>В исходное уравнение вместо $x$ подставляем $\lambda x$, вместо $y$ —
@@ -321,7 +325,7 @@ footer{
         $$u'x + u = \frac{x + ux}{x} = 1 + u.$$
         <p>Отсюда $u'x = 1$, то есть $\dfrac{du}{dx} = \dfrac{1}{x}$.
         Интегрируем: $u = \ln|x| + C$. Обратная замена $u = y/x$:</p>
-        $$\boxed{\,y = x \ln|x| + Cx\,}.$$
+        $$y = x \ln|x| + Cx.$$
 
         <div class="note">
           <b>Осторожно!</b> Если в ходе решения вы делите на что-то, что может
@@ -344,22 +348,21 @@ footer{
       <div class="theory-card">
         <span class="label">Теория</span>
 
-        <p><b>Определение.</b> Уравнение вида
-          $$y' + P(x)\,y = Q(x)$$
-          называется <b>линейным неоднородным</b> уравнением первого порядка.
-          Здесь $P(x)$ и $Q(x)$ — заданные функции (или константы), $Q(x) \not\equiv 0$.
-        </p>
+        <p><b>Определение.</b> Уравнение вида</p>
+        $$y' + P(x)\,y = Q(x)$$
+        <p>называется <b>линейным неоднородным</b> уравнением первого порядка.
+        Здесь $P(x)$ и $Q(x)$ — заданные функции (или константы), $Q(x) \not\equiv 0$.</p>
 
         <p>Если переменные разделить не удалось и уравнение не однородное —
         в 90% случаев перед вами именно линейное уравнение.</p>
 
         <h3>Метод Бернулли (замена $y = uv$)</h3>
-        <p>Ищем решение в виде произведения двух функций:
-          $$y = u(x)\cdot v(x), \qquad y' = u'v + uv'.$$</p>
-        <p>Подставляем в уравнение:
-          $$u'v + uv' + P(x)\,uv = Q(x).$$
-          Группируем слагаемые с $u$:
-          $$u'v + u\bigl(v' + P(x)v\bigr) = Q(x).$$</p>
+        <p>Ищем решение в виде произведения двух функций:</p>
+        $$y = u(x)\cdot v(x), \qquad y' = u'v + uv'.$$
+        <p>Подставляем в уравнение:</p>
+        $$u'v + uv' + P(x)\,uv = Q(x).$$
+        <p>Группируем слагаемые с $u$:</p>
+        $$u'v + u\bigl(v' + P(x)v\bigr) = Q(x).$$
 
         <div class="formula-block">
           <b>Система:</b>
@@ -386,7 +389,7 @@ footer{
         <p>Из первого: $\dfrac{dv}{v} = -dx \Rightarrow \ln|v| = -x \Rightarrow v = e^{-x}$.</p>
         <p>Второе: $u' e^{-x} = 1 \Rightarrow u' = e^{x} \Rightarrow u = e^{x} + C$.</p>
         <p>Итого: $y = uv = (e^{x} + C)\,e^{-x} = 1 + Ce^{-x}$.</p>
-        <p>Ответ: $\boxed{y = 1 + Ce^{-x}}$.</p>
+        <p>Ответ: $y = 1 + Ce^{-x}$.</p>
 
         <div class="tip">
           Если после интегрирования получается «некрасивый» ответ, часто
@@ -403,8 +406,7 @@ footer{
     </section>
 
     <footer>
-      Тренажёр по дифференциальным уравнениям · сделано для учеников ·
-      материал основан на mathprofi.ru
+      Тренажёр по дифференциальным уравнениям · материал основан на mathprofi.ru
     </footer>
   </main>
 </div>
@@ -412,16 +414,9 @@ footer{
 <script>
 /* ============================================================
    ДАННЫЕ ЗАДАЧ
-   ------------------------------------------------------------
-   difficulty: 1 | 2 | 3
-   answer:    эталон (строка с LaTeX)
-   accept:    массив эквивалентных форм для автопроверки
-   hint:      подсказка
-   solution:  пошаговое решение (HTML с $...$ для KaTeX)
    ============================================================ */
 const TASKS = {
 
-  /* ---------- РАЗДЕЛЯЮЩИЕСЯ ПЕРЕМЕННЫЕ ---------- */
   separable: [
     {
       difficulty: 1,
@@ -514,9 +509,7 @@ const TASKS = {
         <p>$(1+x^2)\\,dy = -y\\,dx \\Rightarrow \\dfrac{dy}{y} = -\\dfrac{dx}{1+x^2}$.</p>
         <p>Интегрируем: $\\ln|y| = -\\arctan x + C_1$.</p>
         <p>Общий интеграл: $\\boxed{y(1+x^2) = C}$ — либо в виде
-          $y = C e^{-\\arctan x}$.<br>
-          (Обе формы эквивалентны после переобозначения константы; в ответе
-          достаточно одной.)</p>
+          $y = C e^{-\\arctan x}$.</p>
       `
     },
     {
@@ -535,7 +528,6 @@ const TASKS = {
     }
   ],
 
-  /* ---------- ОДНОРОДНЫЕ ---------- */
   homogeneous: [
     {
       difficulty: 1,
@@ -643,13 +635,11 @@ const TASKS = {
         <p>$u'x = \\dfrac{1+u^2 - 2u^2}{2u} = \\dfrac{1-u^2}{2u}
           \\Rightarrow \\dfrac{2u\\,du}{1-u^2} = \\dfrac{dx}{x}$.</p>
         <p>$-\\ln|1-u^2| = \\ln|x| + C_1 \\Rightarrow 1-u^2 = \\dfrac{C}{x^2}$.</p>
-        <p>С учётом $u = y/x$: $x^2 - y^2 = C_1 \\Rightarrow y^2 - x^2 = Cx$
-          (после переобозначения).</p>
+        <p>С учётом $u = y/x$: $x^2 - y^2 = C_1 \\Rightarrow y^2 - x^2 = Cx$.</p>
       `
     }
   ],
 
-  /* ---------- ЛИНЕЙНЫЕ ---------- */
   linear: [
     {
       difficulty: 1,
@@ -741,9 +731,10 @@ const TASKS = {
     {
       difficulty: 3,
       statement: "Задача Коши: $y' - \\dfrac{2y}{x} = x^3$, $y(1) = 0$.",
-      answer: "$y = x^3(x - 1)$",
-      accept: ["y=x^3(x-1)", "y = x^3(x-1)", "y=x^4-x^3"],
-      hint: "Общее решение: $y = x^3(x + C)$.",
+      answer: "$y = \\dfrac{x^2(x^2-1)}{2}$",
+      accept: ["y=x^3(x-1)", "y = x^3(x-1)", "y=x^4-x^3",
+               "y = (x^4 - x^2)/2", "y=(x^4-x^2)/2"],
+      hint: "Общее решение: $y = \\dfrac{x^4}{2} + Cx^2$.",
       solution: `
         <p>Замена $y=uv$: $u'v + u\\!\\left(v' - \\dfrac{2v}{x}\\right) = x^3$.</p>
         <p>$v' - \\dfrac{2v}{x} = 0 \\Rightarrow \\dfrac{dv}{v} = \\dfrac{2\\,dx}{x}
@@ -758,8 +749,9 @@ const TASKS = {
     {
       difficulty: 3,
       statement: "$y' + y\\tan x = \\dfrac{1}{\\cos x}$",
-      answer: "$y = (x + C)\\cos x$",
-      accept: ["y=(x+C)cos x", "y=(x+C)\\cos x", "y=cos x (x+C)"],
+      answer: "$y = \\sin x + C\\cos x$",
+      accept: ["y=(x+C)cos x", "y=(x+C)\\cos x", "y=cos x (x+C)",
+               "y = sin x + C cos x", "y=sinx+Ccosx"],
       hint: "Система: $v' + v\\tan x = 0$, $u'v = 1/\\cos x$.",
       solution: `
         <p>Замена $y=uv$: $u'v + u(v' + v\\tan x) = \\dfrac{1}{\\cos x}$.</p>
@@ -779,20 +771,44 @@ const TASKS = {
    ============================================================ */
 
 const STORAGE_KEY = 'de_trainer_progress_v1';
-let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+let progress = {};
+try {
+  progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+} catch (e) { progress = {}; }
 
 function saveProgress() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
   updateProgressBar();
 }
 
 function updateProgressBar() {
   const total = Object.values(TASKS).reduce((s, arr) => s + arr.length, 0);
   const solved = Object.values(progress).filter(Boolean).length;
-  document.getElementById('progress-count').textContent = `${solved} / ${total}`;
+  const el = document.getElementById('progress-count');
+  if (el) el.textContent = solved + ' / ' + total;
 }
 
-/* --- Нормализация ответа для автопроверки --- */
+/* --- Универсальный рендер формул --- */
+function renderMath(el) {
+  if (typeof window.renderMathInElement !== 'function') return false;
+  try {
+    window.renderMathInElement(el || document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '\\[', right: '\\]', display: true },
+        { left: '$',  right: '$',  display: false },
+        { left: '\\(', right: '\\)', display: false }
+      ],
+      throwOnError: false
+    });
+    return true;
+  } catch (e) {
+    console.error('KaTeX render error:', e);
+    return false;
+  }
+}
+
+/* --- Нормализация ответа --- */
 function normalize(s) {
   return String(s)
     .toLowerCase()
@@ -818,63 +834,65 @@ function normalize(s) {
 function checkAnswer(userAnswer, task) {
   const u = normalize(userAnswer);
   if (!u) return false;
-  const candidates = [task.answer, ...(task.accept || [])].map(normalize);
-  return candidates.some(c => c === u);
+  const candidates = [task.answer].concat(task.accept || []).map(normalize);
+  return candidates.some(function (c) { return c === u; });
 }
 
-/* --- Рендер задачи --- */
-function renderTask(task, idx, sectionKey) {
-  const id = `${sectionKey}-${idx}`;
+/* --- Создание DOM-элемента задачи --- */
+function buildTaskEl(task, idx, sectionKey) {
+  const id = sectionKey + '-' + idx;
   const stars = '★'.repeat(task.difficulty) + '☆'.repeat(3 - task.difficulty);
-  const solvedClass = progress[id] ? ' solved' : '';
+  const isSolved = !!progress[id];
 
   const div = document.createElement('div');
-  div.className = 'task' + solvedClass;
+  div.className = 'task' + (isSolved ? ' solved' : '');
   div.dataset.id = id;
-  div.innerHTML = `
-    <div class="task-head">
-      <span class="task-num">Задача ${idx + 1}</span>
-      <span class="stars" title="Сложность">${stars}</span>
-      ${progress[id] ? '<span class="badge">решено</span>' : ''}
-    </div>
-    <div class="task-statement">${task.statement}</div>
 
-    <div class="answer-row">
-      <input type="text" placeholder="Введите ответ (например, y = Ce^x)"
-             value="${progress[id] && progress[id].user ? progress[id].user : ''}">
-    </div>
+  const userVal = (isSolved && progress[id].user) ? progress[id].user : '';
 
-    <div class="answer-row">
-      <button class="btn-primary" data-action="check">Проверить ответ</button>
-      <button class="btn-warn"    data-action="hint">Подсказка</button>
-      <button class="btn-ghost"   data-action="solution">Показать решение</button>
-    </div>
+  div.innerHTML =
+    '<div class="task-head">' +
+      '<span class="task-num">Задача ' + (idx + 1) + '</span>' +
+      '<span class="stars" title="Сложность">' + stars + '</span>' +
+      (isSolved ? '<span class="badge">решено</span>' : '') +
+    '</div>' +
+    '<div class="task-statement">' + task.statement + '</div>' +
+    '<div class="answer-row">' +
+      '<input type="text" placeholder="Введите ответ (например, y = Ce^x)" value="' +
+        userVal.replace(/"/g, '&quot;') + '">' +
+    '</div>' +
+    '<div class="answer-row">' +
+      '<button class="btn-primary" data-action="check">Проверить ответ</button>' +
+      '<button class="btn-warn"    data-action="hint">Подсказка</button>' +
+      '<button class="btn-ghost"   data-action="solution">Показать решение</button>' +
+    '</div>' +
+    '<div class="feedback"></div>' +
+    '<div class="hint-block"></div>' +
+    '<div class="solution-block">' +
+      '<h4>Решение</h4>' +
+      task.solution +
+    '</div>';
 
-    <div class="feedback"></div>
-    <div class="hint-block"></div>
-    <div class="solution-block">
-      <h4>Решение</h4>
-      ${task.solution}
-    </div>
-  `;
   return div;
 }
 
 /* --- Инициализация раздела --- */
 function initSection(sectionKey, containerId) {
   const container = document.getElementById(containerId);
-  TASKS[sectionKey].forEach((task, i) => {
-    container.appendChild(renderTask(task, i, sectionKey));
+  if (!container) return;
+
+  TASKS[sectionKey].forEach(function (task, i) {
+    container.appendChild(buildTaskEl(task, i, sectionKey));
   });
 
-  container.addEventListener('click', e => {
+  container.addEventListener('click', function (e) {
     const btn = e.target.closest('button[data-action]');
     if (!btn) return;
     const taskEl = btn.closest('.task');
     const id = taskEl.dataset.id;
-    const [, idxStr] = id.split('-');
-    const idx = parseInt(idxStr, 10);
+    const idx = parseInt(id.split('-')[1], 10);
     const task = TASKS[sectionKey][idx];
+
     const feedback = taskEl.querySelector('.feedback');
     const hintEl   = taskEl.querySelector('.hint-block');
     const solEl    = taskEl.querySelector('.solution-block');
@@ -890,11 +908,10 @@ function initSection(sectionKey, containerId) {
       const ok = checkAnswer(user, task);
       if (ok) {
         feedback.className = 'feedback ok';
-        feedback.innerHTML = '✅ Верно! Ответ совпадает с эталоном.';
+        feedback.textContent = '✅ Верно! Ответ совпадает с эталоном.';
         taskEl.classList.add('solved');
-        progress[id] = { solved: true, user };
+        progress[id] = { solved: true, user: user };
         saveProgress();
-        // обновим бейдж
         if (!taskEl.querySelector('.badge')) {
           const b = document.createElement('span');
           b.className = 'badge';
@@ -903,119 +920,140 @@ function initSection(sectionKey, containerId) {
         }
       } else {
         feedback.className = 'feedback err';
-        feedback.innerHTML = `
-          ❌ Пока не совпадает.<br>
-          <b>Эталон:</b> ${task.answer}<br>
-          <span style="font-size:13.5px;color:#7f1d1d">
-            Возможно, ваш ответ эквивалентен — проверьте вручную
-            или нажмите «Показать решение».
-          </span>`;
+        feedback.innerHTML =
+          '❌ Пока не совпадает.<br>' +
+          '<b>Эталон:</b> ' + task.answer + '<br>' +
+          '<span style="font-size:13.5px;color:#7f1d1d">' +
+          'Возможно, ваш ответ эквивалентен — проверьте вручную ' +
+          'или нажмите «Показать решение».</span>';
       }
-      if (window.renderMathInElement) {
-        renderMathInElement(feedback, {
-          delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '$', right: '$', display: false}
-          ]
-        });
-      }
+      renderMath(feedback);
     }
 
     if (btn.dataset.action === 'hint') {
-      hintEl.style.display = hintEl.style.display === 'block' ? 'none' : 'block';
-      if (hintEl.innerHTML.trim() === '') {
+      const willShow = hintEl.style.display !== 'block';
+      hintEl.style.display = willShow ? 'block' : 'none';
+      if (willShow && !hintEl.dataset.rendered) {
         hintEl.innerHTML = task.hint || 'Подсказка отсутствует.';
-        if (window.renderMathInElement) {
-          renderMathInElement(hintEl, {
-            delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '$', right: '$', display: false}
-            ]
-          });
-        }
+        renderMath(hintEl);
+        hintEl.dataset.rendered = '1';
       }
     }
 
     if (btn.dataset.action === 'solution') {
-      const visible = solEl.style.display === 'block';
-      solEl.style.display = visible ? 'none' : 'block';
-      if (!visible && !solEl.dataset.rendered) {
-        if (window.renderMathInElement) {
-          renderMathInElement(solEl, {
-            delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '$', right: '$', display: false}
-            ]
-          });
-        }
+      const willShow = solEl.style.display !== 'block';
+      solEl.style.display = willShow ? 'block' : 'none';
+      if (willShow && !solEl.dataset.rendered) {
+        renderMath(solEl);
         solEl.dataset.rendered = '1';
       }
-      if (!visible) {
+      if (willShow) {
         feedback.className = 'feedback info';
-        feedback.innerHTML = `📘 Эталонный ответ: <b>${task.answer}</b>`;
-        if (window.renderMathInElement) {
-          renderMathInElement(feedback, {
-            delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '$', right: '$', display: false}
-            ]
-          });
-        }
+        feedback.innerHTML = '📘 Эталонный ответ: <b>' + task.answer + '</b>';
+        renderMath(feedback);
       }
     }
   });
 
-  // Enter в поле ввода = «Проверить»
-  container.addEventListener('keydown', e => {
+  // Enter в поле = «Проверить»
+  container.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+      e.preventDefault();
       const taskEl = e.target.closest('.task');
       taskEl.querySelector('button[data-action="check"]').click();
     }
   });
 }
 
-/* --- Навигация --- */
+/* --- Навигация по разделам --- */
 function initNav() {
   const links = document.querySelectorAll('#nav a');
-  links.forEach(a => {
-    a.addEventListener('click', () => {
-      links.forEach(x => x.classList.remove('active'));
+  links.forEach(function (a) {
+    a.addEventListener('click', function () {
+      links.forEach(function (x) { x.classList.remove('active'); });
       a.classList.add('active');
     });
   });
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        links.forEach(x => x.classList.toggle('active',
-          x.dataset.target === id));
-      }
-    });
-  }, { rootMargin: '-40% 0px -55% 0px' });
+  if (typeof IntersectionObserver !== 'undefined') {
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          links.forEach(function (x) {
+            x.classList.toggle('active', x.dataset.target === id);
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
 
-  document.querySelectorAll('section').forEach(s => observer.observe(s));
+    document.querySelectorAll('section').forEach(function (s) {
+      observer.observe(s);
+    });
+  }
+}
+
+/* --- Проверка загрузки KaTeX с fallback --- */
+function ensureKatexLoaded() {
+  if (typeof window.renderMathInElement === 'function') return;
+
+  // Попробуем подгрузить альтернативный CDN
+  const fallbacks = [
+    'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
+    'https://unpkg.com/katex@0.16.9/dist/katex.min.css'
+  ];
+  fallbacks.forEach(function (href) {
+    const l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = href;
+    document.head.appendChild(l);
+  });
+
+  const scripts = [
+    'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js',
+    'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js'
+  ];
+  let loaded = 0;
+  scripts.forEach(function (src) {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = function () {
+      loaded++;
+      if (loaded === scripts.length) {
+        renderMath(document.body);
+      }
+    };
+    document.head.appendChild(s);
+  });
+
+  // Если через 4 секунды KaTeX так и не появился — показываем баннер
+  setTimeout(function () {
+    if (typeof window.renderMathInElement !== 'function') {
+      const warn = document.getElementById('katex-warning');
+      if (warn) warn.style.display = 'block';
+    }
+  }, 4000);
 }
 
 /* --- Старт --- */
-window.addEventListener('DOMContentLoaded', () => {
+function start() {
+  ensureKatexLoaded();
+
   initSection('separable',   'tasks-separable');
   initSection('homogeneous', 'tasks-homogeneous');
   initSection('linear',      'tasks-linear');
   initNav();
   updateProgressBar();
 
-  // первичный рендер KaTeX (теория)
-  if (window.renderMathInElement) {
-    renderMathInElement(document.body, {
-      delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$',  right: '$',  display: false}
-      ],
-      throwOnError: false
-    });
-  }
-});
+  // Первичный рендер теории (после того как KaTeX гарантированно доступен)
+  renderMath(document.body);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', start);
+} else {
+  start();
+}
 </script>
 </body>
 </html>
